@@ -1,0 +1,203 @@
+.root {
+    -fx-font-family: "Segoe UI", Tahoma, Arial;
+}
+
+.sidebar {
+    -fx-background-color: white;
+    -fx-padding: 18 12 18 12;
+    -fx-spacing: 10;
+    -fx-background-radius: 20;
+}
+
+.profile-row {
+    -fx-padding: 6 8 12 8;
+    -fx-alignment: CENTER_LEFT;
+}
+
+.profile-box {
+    -fx-background-radius: 30px;
+    -fx-padding: 4px 12px 4px 20px;
+    -fx-spacing: 8px;
+    -fx-background-color: #faf7ff;
+    -fx-effect: dropshadow(gaussian, rgba(106,59,154,0.15), 4, 0, 2, 2);
+    -fx-alignment: center;
+}
+
+.profile-name {
+    -fx-text-fill: black;
+    -fx-font-weight: bold;
+    -fx-font-size: 14px;
+    -fx-padding: 0;
+}
+
+
+.menubar {
+    -fx-text-fill: rgb(97, 94, 94);
+    -fx-font-size: 16px;
+    -fx-font-weight: bold;
+    -fx-alignment: center_left;
+}
+
+.menu-list {
+    -fx-padding: 8 4 4 4;
+}
+
+.menu-item {
+    -fx-text-fill: #615e5e;
+    -fx-font-size: 15px;
+    -fx-font-weight: bold;
+    -fx-alignment: CENTER_Left;
+    -fx-padding: 10 12 10 12;
+    -fx-background-radius: 10;
+    -fx-border-radius: 10;
+    -fx-cursor: hand;
+    -fx-translate-x: 0;
+    -fx-transition: all 200ms ease-in-out;
+}
+
+
+
+.header {
+    -fx-background-color: white ;
+    -fx-padding: 12 20 12 20;
+    -fx-background-radius: 20;
+}
+
+.app-title {
+    -fx-text-fill: #4a1d7c;
+    -fx-font-size: 24px;
+    -fx-font-weight: bold;
+    -fx-background-color: #f0e6ff;
+    -fx-padding: 10px 20px;
+    -fx-background-radius: 15px;
+    -fx-effect: dropshadow(gaussian, rgba(68,33,102,0.1), 8, 0, 2, 4);
+    -fx-alignment: center;
+}
+
+.overview {
+    -fx-text-fill: #4a1d7c;
+    -fx-font-size: 20px;
+    -fx-font-weight: bold;
+}
+
+.card {
+    -fx-background-radius: 14;
+    -fx-padding: 16;
+    -fx-effect: dropshadow(gaussian, rgba(68,33,102,0.18), 12, 0, 4, 6);
+    -fx-background-color: linear-gradient(from 0% 0% to 100% 100%, rgba(56, 24, 120, 0.98), rgba(150, 80, 230, 0.98));
+    -fx-alignment: center;
+    -fx-cursor: default;
+    -fx-user-select: none;
+    -fx-border-color: #f4f2f8;
+    -fx-border-width: 2px;
+    -fx-border-radius: 14px;
+    -fx-pref-height: 160px;
+    -fx-padding: 20;
+}
+.card:hover {
+    -fx-background-color: linear-gradient(from 0% 0% to 100% 100%, rgba(67, 24, 120, 0.98), rgba(157, 80, 230, 0.98));
+    -fx-effect: dropshadow(gaussian, rgba(68,33,102,0.35), 24, 0, 0, 12);
+    -fx-translate-y: -4;
+
+}
+
+.card2 {
+    -fx-background-radius: 14;
+    -fx-padding: 16;
+    -fx-effect: dropshadow(gaussian, rgba(68,33,102,0.18), 12, 0, 4, 6);
+    -fx-background-color: linear-gradient(from 0% 0% to 100% 100%, #fbf8ff, #f1eaff);
+    -fx-alignment: top_left;
+    -fx-border-color: transparent;
+    -fx-border-width: 0;
+}
+
+.card-label1 {
+    -fx-text-fill: white;
+    -fx-font-size: 14px;
+    -fx-font-weight: bold;
+    -fx-alignment: center_left;
+}
+.card-label2 {
+    -fx-text-fill: white;
+    -fx-font-size: 36px;
+    -fx-font-weight: bold;
+    -fx-alignment: center;
+}
+
+.order {
+    -fx-background-radius: 12px;
+    -fx-padding: 15px 20px;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.03), 4, 0, 1, 2);
+    -fx-background-color: #ffffff;
+    -fx-border-color: #b094e6;
+    -fx-border-width: 1px;
+    -fx-border-radius: 12px;
+    -fx-cursor: default;
+    -fx-alignment: center-left;
+}
+
+.order-title {
+    -fx-font-size: 15px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #2b0b5b;
+    -fx-padding: 0 0 6 0;
+    -fx-wrap-text: true;
+    -fx-font-family: 'System', sans-serif;
+}
+
+.order-detail {
+    -fx-font-size: 13px;
+    -fx-text-fill: #5a4a6a;
+    -fx-padding: 2px 0;
+    -fx-wrap-text: true;
+    -fx-font-family: 'Segoe UI', sans-serif;
+    -fx-opacity: 0.9;
+}
+
+.order:hover {
+    -fx-background-color: linear-gradient(from 0% 0% to 100% 100%, #ffffff, #fbf8ff);
+    -fx-effect: dropshadow(gaussian, rgba(43,11,83,0.06), 12, 0, 2, 6);
+}
+
+.overview { -fx-padding: 6 0 8 0; }
+
+
+.recent-orders-card {
+    -fx-background-color: #d3baf1;
+    -fx-background-radius: 15px;
+    -fx-padding: 10px;
+    -fx-effect: dropshadow(gaussian, rgba(106,59,154,0.15), 12, 0.1, 4, 6);
+    -fx-border-color: #f4f2f8;
+    -fx-border-width: 2px;
+    -fx-border-radius: 15px;
+    -fx-spacing: 12px;
+}
+
+.menu-hbox {
+    -fx-alignment: CENTER_LEFT;
+    -fx-padding: 8 8 8 8;
+    -fx-spacing: 8;
+    -fx-background-radius: 10;
+}
+
+.menu-hbox:hover {
+    -fx-background-color: linear-gradient(from 0% 0% to 100% 100%, #6b2bdc, #9b59ff);
+    -fx-cursor: hand;
+}
+
+.menu-hbox:hover .menu-item {
+    -fx-text-fill: white;
+}
+
+.menu-hbox:hover .menu-item {
+    -fx-translate-x: 6;
+}
+
+.scroll-pane {
+    -fx-background-color: transparent;
+    -fx-background: transparent;
+}
+.scroll-pane .viewport {
+    -fx-background-color: transparent;
+    -fx-background: transparent;
+}
