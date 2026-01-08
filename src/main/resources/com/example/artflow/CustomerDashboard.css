@@ -1,0 +1,183 @@
+.root {
+    -fx-font-family: "Segoe UI", Tahoma, Arial;
+}
+
+.sidebar {
+    -fx-background-color: white;
+    -fx-padding: 16 12 16 12;
+    -fx-spacing: 10;
+    -fx-background-radius: 18;
+}
+
+.profile-row {
+    -fx-padding: 6 8 10 8;
+    -fx-alignment: CENTER_LEFT;
+}
+
+.profile-box {
+    -fx-background-radius: 26px;
+    -fx-padding: 6px 12px 6px 18px;
+    -fx-spacing: 8px;
+    -fx-background-color: #f6fffd; /* very light teal */
+    -fx-effect: dropshadow(gaussian, rgba(6,100,84,0.08), 4, 0, 2, 2);
+    -fx-alignment: center;
+}
+
+.profile-name {
+    -fx-text-fill: #044d42; /* deep teal */
+    -fx-font-weight: bold;
+    -fx-font-size: 14px;
+}
+
+.menubar {
+    -fx-text-fill: #2f6f68;
+    -fx-font-size: 16px;
+    -fx-font-weight: bold;
+    -fx-alignment: center_left;
+}
+
+.menu-list {
+    -fx-padding: 8 4 4 4;
+}
+
+.menu-item {
+    -fx-text-fill: #3e6a64;
+    -fx-font-size: 15px;
+    -fx-font-weight: bold;
+    -fx-alignment: CENTER_Left;
+    -fx-padding: 10 12 10 12;
+    -fx-background-radius: 10;
+    -fx-border-radius: 10;
+    -fx-cursor: hand;
+    -fx-translate-x: 0;
+    -fx-transition: all 180ms ease-in-out;
+}
+
+.menu-hbox {
+    -fx-alignment: CENTER_LEFT;
+    -fx-padding: 8 8 8 8;
+    -fx-spacing: 8;
+    -fx-background-radius: 10;
+}
+
+.menu-hbox:hover {
+    -fx-background-color: linear-gradient(from 0% 0% to 100% 100%, #00897b, #26a69a);
+    -fx-cursor: hand;
+}
+
+.menu-hbox:hover .menu-item {
+    -fx-text-fill: white;
+}
+
+.menu-hbox:hover .menu-item {
+    -fx-translate-x: 6;
+}
+
+
+.header {
+    -fx-background-color: white;
+    -fx-padding: 12 20 12 20;
+    -fx-background-radius: 18;
+}
+
+.app-title {
+    -fx-text-fill: #00695c;
+    -fx-font-size: 22px;
+    -fx-font-weight: bold;
+    -fx-background-color: #e0f2f1;
+    -fx-padding: 8px 18px;
+    -fx-background-radius: 12px;
+    -fx-effect: dropshadow(gaussian, rgba(0,105,96,0.06), 8, 0, 2, 4);
+    -fx-alignment: center;
+}
+
+.scroll-pane {
+    -fx-background-color: transparent;
+    -fx-background: transparent;
+}
+
+
+
+.welcome-title {
+    -fx-font-size: 34px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #00695c; /* teal heading */
+}
+
+.welcome-subtitle {
+    -fx-font-size: 16px;
+    -fx-text-fill: #5b6b68;
+    -fx-padding: 0 0 10 0;
+}
+
+/* Category label (the "Category:") under the search bar */
+.category-label {
+    -fx-font-size: 18px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #004d45; /* deep teal to match theme */
+    -fx-padding: 8px 0 6px 0; /* spacing above/below */
+    /* JavaFX doesn't support -fx-margin on Label; layout spacing is controlled by parent. */
+    -fx-alignment: CENTER_LEFT;
+}
+
+/* Category chips */
+.category-chip {
+    -fx-background-radius: 20px;
+    -fx-background-color: linear-gradient(from 0% 0% to 100% 100%, #0b7d72, #056a60);
+    -fx-padding: 8px 14px;
+    -fx-text-fill: white;
+    -fx-font-size: 14px;
+    -fx-alignment: center;
+    -fx-border-color: rgb(255, 255, 255);
+    -fx-border-width: 2px;
+    -fx-border-radius: 20px;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.18), 6, 0, 1, 2);
+    -fx-cursor: hand;
+    -fx-min-width: 70px;
+    -fx-text-alignment: center;
+}
+.category-chip:hover {
+    /* darker hover for stronger contrast */
+    -fx-background-color: linear-gradient(from 0% 0% to 100% 100%, #07645a, #044d45);
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.28), 10, 0, 2, 4);
+    -fx-border-color: rgba(255,255,255,0.14);
+    -fx-border-width: 1px;
+    -fx-font-weight: bold;
+    -fx-translate-y: -2px;
+}
+
+/* Selected / active state for chip - apply by adding the "selected" style class in code */
+.category-chip.selected {
+    -fx-background-color: linear-gradient(from 0% 0% to 100% 100%, #045a52, #003f36);
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.32), 14, 0, 2, 6);
+    -fx-border-color: rgba(255,255,255,0.12);
+    -fx-border-width: 1.5px;
+    -fx-translate-y: -2px;
+}
+
+
+.customer-root {
+    -fx-background-color: linear-gradient(to bottom right, #e8faf7 0%, #dff6f3 40%, #f1fffe 100%);
+}
+
+.search-field {
+    -fx-background-radius: 24px;
+    -fx-background-color: linear-gradient(from 0% 0% to 100% 100%, #ffffff, #f8fffc);
+    -fx-padding: 10px 14px 10px 42px; /* leave room for a search icon if added */
+    -fx-font-size: 16px;
+    -fx-text-fill: #02382f;
+    -fx-prompt-text-fill: rgba(0,0,0,0.45);
+    -fx-effect: dropshadow(gaussian, rgba(6,100,84,0.04), 6, 0, 1, 2);
+    -fx-cursor: text;
+}
+
+.search-field:focused {
+    -fx-border-color: rgba(6,150,120,0.95);
+    -fx-border-radius: 24px;
+    -fx-effect: dropshadow(gaussian, rgba(6,150,120,0.14), 12, 0, 0, 8);
+    -fx-background-color: linear-gradient(from 0% 0% to 100% 100%, #ffffff, #eafff2);
+}
+
+.search-field-text {
+    -fx-background-color: transparent;
+}

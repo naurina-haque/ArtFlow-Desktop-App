@@ -1,0 +1,205 @@
+.root {
+    -fx-font-family: "Segoe UI", Tahoma, Arial;
+}
+
+.sidebar {
+    -fx-background-color: white;
+    -fx-padding: 18 12 18 12;
+    -fx-spacing: 10;
+    -fx-background-radius: 20;
+}
+
+.profile-row {
+    -fx-padding: 6 8 12 8;
+    -fx-alignment: CENTER_LEFT;
+}
+
+.profile-box {
+    -fx-background-radius: 30px;
+    -fx-padding: 4px 12px 4px 20px;
+    -fx-spacing: 8px;
+    -fx-background-color: #faf7ff;
+    -fx-effect: dropshadow(gaussian, rgba(106,59,154,0.15), 4, 0, 2, 2);
+    -fx-alignment: center;
+}
+
+.profile-name {
+    -fx-text-fill: black;
+    -fx-font-weight: bold;
+    -fx-font-size: 14px;
+    -fx-padding: 0;
+}
+
+
+.menubar {
+    -fx-text-fill: rgb(97, 94, 94);
+    -fx-font-size: 16px;
+    -fx-font-weight: bold;
+    -fx-alignment: center_left;
+}
+
+.menu-list {
+    -fx-padding: 8 4 4 4;
+}
+
+.menu-item {
+    -fx-text-fill: #615e5e;
+    -fx-font-size: 15px;
+    -fx-font-weight: bold;
+    -fx-alignment: CENTER_Left;
+    -fx-padding: 10 12 10 12;
+    -fx-background-radius: 10;
+    -fx-border-radius: 10;
+    -fx-cursor: hand;
+    -fx-translate-x: 0;
+    -fx-transition: all 200ms ease-in-out;
+}
+
+
+
+.header {
+    -fx-background-color: white ;
+    -fx-padding: 12 20 12 20;
+    -fx-background-radius: 20;
+}
+
+.app-title {
+    -fx-text-fill: #4a1d7c;
+    -fx-font-size: 24px;
+    -fx-font-weight: bold;
+    -fx-background-color: #f0e6ff;
+    -fx-padding: 10px 20px;
+    -fx-background-radius: 15px;
+    -fx-effect: dropshadow(gaussian, rgba(68,33,102,0.1), 8, 0, 2, 4);
+    -fx-alignment: center;
+}
+.menu-hbox {
+    -fx-alignment: CENTER_LEFT;
+    -fx-padding: 8 8 8 8;
+    -fx-spacing: 8;
+    -fx-background-radius: 10;
+}
+
+.menu-hbox:hover {
+    -fx-background-color: linear-gradient(from 0% 0% to 100% 100%, #6b2bdc, #9b59ff);
+    -fx-cursor: hand;
+}
+
+.menu-hbox:hover .menu-item {
+    -fx-text-fill: white;
+}
+
+.menu-hbox:hover .menu-item {
+    -fx-translate-x: 6;
+}
+
+.scroll-pane {
+    -fx-background-color: transparent;
+    -fx-background: transparent;
+}
+
+
+.artist-root {
+    -fx-background-color: linear-gradient(to bottom right, #eee8fa 0%, #e4dff6 40%, #f6f1ff 100%);
+}
+.category-label {
+    -fx-font-size: 18px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #240a4a;
+    -fx-padding: 8px 0 6px 0;
+    -fx-alignment: CENTER_LEFT;
+}
+
+
+.category-chip {
+    -fx-background-radius: 20px;
+    -fx-background-color: linear-gradient(from 0% 0% to 100% 100%, #513381, #3f1977);
+    -fx-padding: 8px 14px;
+    -fx-text-fill: white;
+    -fx-font-size: 14px;
+    -fx-alignment: center;
+    -fx-border-color: rgb(255, 255, 255);
+    -fx-border-width: 2px;
+    -fx-border-radius: 20px;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.18), 6, 0, 1, 2);
+    -fx-cursor: hand;
+    -fx-text-alignment: center;
+}
+.category-chip:hover {
+    -fx-background-color: linear-gradient(from 0% 0% to 100% 100%, #542eb3, #5f21a1);
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.26), 10, 0, 2, 4);
+    -fx-font-weight: bold;
+    -fx-translate-y: -2px;
+}
+
+.category-chip.selected {
+    -fx-background-color: linear-gradient(from 0% 0% to 100% 100%, #431177, #31095e);
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.32), 14, 0, 2, 6);
+    -fx-border-color: rgba(255,255,255,0.12);
+    -fx-border-width: 1.5px;
+    -fx-translate-y: -2px;
+}
+
+
+
+.search-field {
+    -fx-background-radius: 24px;
+    -fx-background-color: linear-gradient(from 0% 0% to 100% 100%, #ffffff, #fbf8ff);
+    -fx-padding: 10px 14px 10px 42px; /* leave room for a search icon if added */
+    -fx-font-size: 16px;
+    -fx-text-fill: #160238;
+    -fx-prompt-text-fill: rgba(0,0,0,0.45);
+    -fx-effect: dropshadow(gaussian, rgba(40, 6, 100, 0.04), 6, 0, 1, 2);
+    -fx-cursor: text;
+}
+
+.search-field:focused {
+    -fx-border-color: rgba(64, 6, 150, 0.95);
+    -fx-border-radius: 24px;
+    -fx-effect: dropshadow(gaussian, rgba(54, 6, 150, 0.14), 12, 0, 0, 8);
+    -fx-background-color: linear-gradient(from 0% 0% to 100% 100%, #ffffff, #f2eaff);
+}
+
+.search-field-text {
+    -fx-background-color: transparent;
+}
+
+.add-art-btn {
+    -fx-background-color: linear-gradient(from 0% 0% to 100% 100%, #6d28d9, #8b5cf6);
+    -fx-text-fill: white;
+    -fx-font-weight: bold;
+    -fx-background-radius: 12px;
+    -fx-padding: 8px 14px;
+    -fx-effect: dropshadow(gaussian, rgba(107,40,217,0.24), 8, 0, 0, 2);
+    -fx-cursor: hand;
+    -fx-font-size: 14px;
+}
+
+.add-art-btn:hover {
+    -fx-background-color: linear-gradient(from 0% 0% to 100% 100%, #7c3aed, #9f7bfb);
+    -fx-translate-y: -2px;
+}
+
+.add-art-btn:focused {
+    -fx-effect: dropshadow(gaussian, rgba(99,102,241,0.4), 12, 0, 0, 4);
+    -fx-border-color: rgba(255,255,255,0.18);
+}
+
+/* responsive behavior: let the button shrink on small widths */
+.add-art-btn {
+    -fx-min-width: 100px;
+    -fx-max-width: 220px;
+}
+
+/* when the parent width is small, the font-size and padding will reduce via a style class applied from code (or you can rely on automatic wrapping) */
+
+/* small helper: make the anchor pane's children responsive by allowing the label to wrap */
+AnchorPane .label {
+    -fx-wrap-text: true;
+}
+
+.add-art-btn.small-add-btn {
+    -fx-font-size: 12px;
+    -fx-padding: 6px 10px;
+    -fx-min-width: 80px;
+}

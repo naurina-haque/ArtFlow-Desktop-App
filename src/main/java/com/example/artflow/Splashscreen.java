@@ -11,7 +11,7 @@ public class Splashscreen extends Application {
     @Override
     public void start(Stage stage) throws IOException {
         FXMLLoader fxmlLoader1 = new FXMLLoader(Splashscreen.class.getResource("splash.fxml"));
-        Scene scene1 = new Scene(fxmlLoader1.load(), 800, 600);
+        Scene scene1 = new Scene(fxmlLoader1.load(), 1000, 600);
 
         stage.setTitle("ArtFlow");
         stage.setScene(scene1);

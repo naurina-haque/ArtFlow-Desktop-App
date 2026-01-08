@@ -150,6 +150,56 @@ public class ArtistDashboardController {
         }
     }
 
+    @FXML
+    private void openMyArtworks(MouseEvent event) {
+        System.out.println("Opening My Artworks from side menu");
+        try {
+            Stage stage = null;
+            if (event != null && event.getSource() != null) {
+                Object src = event.getSource();
+                if (src instanceof javafx.scene.Node) {
+                    stage = (Stage) ((javafx.scene.Node) src).getScene().getWindow();
+                }
+            }
+
+            if (stage == null) {
+                System.err.println("openMyArtworks: could not determine Stage from event; falling back to profileNameLabel");
+                if (profileNameLabel != null && profileNameLabel.getScene() != null) {
+                    stage = (Stage) profileNameLabel.getScene().getWindow();
+                }
+            }
+
+            if (stage == null) {
+                System.err.println("openMyArtworks failed: no stage available");
+                showAlert(Alert.AlertType.ERROR, "Navigation failed", "Unable to determine application window for navigation.");
+                return;
+            }
+
+            String resourcePath = "/com/example/artflow/ArtistMyArtwork.fxml";
+            URL resUrl = getClass().getResource(resourcePath);
+            if (resUrl == null) {
+                String msg = "MyArtwork FXML resource not found at: " + resourcePath;
+                System.err.println(msg);
+                showAlert(Alert.AlertType.ERROR, "Navigation error", msg);
+                return;
+            }
+
+            System.out.println("Loading MyArtworks FXML: " + resUrl);
+            FXMLLoader loader = new FXMLLoader(resUrl);
+            Scene scene = new Scene(loader.load(), stage.getWidth(), stage.getHeight());
+
+            // optionally set controller state (e.g., profile name) if needed
+            ArtistMyArtworkController controller = loader.getController();
+            controller.initialize(); // safe to call; it has guards
+
+            stage.setScene(scene);
+
+        } catch (IOException e) {
+            e.printStackTrace();
+            showAlert(Alert.AlertType.ERROR, "Navigation error", e.getMessage());
+        }
+    }
+
     private void showAlert(Alert.AlertType type, String title, String message) {
         Alert alert = new Alert(type);
         alert.setTitle(title);

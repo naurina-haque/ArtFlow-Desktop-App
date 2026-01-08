@@ -197,7 +197,9 @@
     -fx-background-color: transparent;
     -fx-background: transparent;
 }
-.scroll-pane .viewport {
-    -fx-background-color: transparent;
-    -fx-background: transparent;
+
+
+
+.artist-root {
+    -fx-background-color: linear-gradient(to bottom right, #eee8fa 0%, #e4dff6 40%, #f6f1ff 100%);
 }

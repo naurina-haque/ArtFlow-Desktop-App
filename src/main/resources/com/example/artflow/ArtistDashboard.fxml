@@ -10,7 +10,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<BorderPane minHeight="-Infinity" prefHeight="661.0" prefWidth="978.0" style="-fx-background-color: #E9E9FF;" stylesheets="@Artistdashboard.css" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.artflow.ArtistDashboardController">
+<BorderPane minHeight="-Infinity" prefHeight="661.0" prefWidth="978.0" styleClass="artist-root" stylesheets="@Artistdashboard.css" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.artflow.ArtistDashboardController">
 
     <left>
         <VBox fx:id="sidebar" prefHeight="561.0" prefWidth="260.0" styleClass="sidebar" BorderPane.alignment="CENTER">
@@ -43,7 +43,7 @@
                                 </Label>
                             </children>
                         </HBox>
-                        <HBox fx:id="artworksHBox" prefHeight="47.0" prefWidth="228.0" styleClass="menu-hbox">
+                        <HBox fx:id="artworksHBox" onMouseClicked="#openMyArtworks" prefHeight="47.0" prefWidth="228.0" styleClass="menu-hbox">
                             <children>
                                 <ImageView fitHeight="17.0" fitWidth="24.0" opacity="0.49" pickOnBounds="true" preserveRatio="true">
                                     <HBox.margin>
@@ -144,7 +144,7 @@
     <center>
         <ScrollPane fitToWidth="true" pannable="true" prefHeight="661.0" prefWidth="746.0" style="-fx-background: transparent; -fx-background-color: transparent;" vbarPolicy="AS_NEEDED" BorderPane.alignment="CENTER">
              <content>
-                <VBox fillWidth="true" prefHeight="831.0" prefWidth="837.0" spacing="10.0" style="-fx-background-color: #E9E9FF;" BorderPane.alignment="CENTER">
+                <VBox fillWidth="true" prefHeight="831.0" prefWidth="837.0" spacing="10.0" BorderPane.alignment="CENTER">
                      <BorderPane.margin>
                          <Insets bottom="10.0" left="0" right="10.0" top="10.0" />
                      </BorderPane.margin>
@@ -175,12 +175,12 @@
                         <Insets />
                      </VBox.margin>
                      </HBox>
-                     <VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="75.0" prefWidth="372.0" spacing="5.0">
+                     <VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="74.0" prefWidth="661.0" spacing="5.0">
                          <children>
-                             <HBox alignment="BASELINE_LEFT" spacing="8">
+                             <HBox alignment="BASELINE_LEFT" prefHeight="43.0" prefWidth="616.0" spacing="8">
                                  <children>
                                      <Label fx:id="welcomeLabel" style="-fx-font-size: 34px; -fx-font-weight: bold; -fx-text-fill: #480f6b;" text="Welcome back," />
-                                     <Label fx:id="firstNameLabel" style="-fx-font-size: 34px; -fx-font-weight: bold; -fx-text-fill: #480f6b;" text="Artist" />
+                                     <Label fx:id="firstNameLabel" prefHeight="42.0" prefWidth="372.0" style="-fx-font-size: 34px; -fx-font-weight: bold; -fx-text-fill: #480f6b;" text="Artist" />
                                  </children>
                              </HBox>
                              <Label style="-fx-font-size: 16px; -fx-text-fill: #666; -fx-padding: 0 0 10 0;" text="Here's what's happening with your art today" />

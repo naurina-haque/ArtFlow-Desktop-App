@@ -1,0 +1,56 @@
+.artcard {
+    -fx-background-color: white;
+    -fx-background-radius: 20px;
+    -fx-padding: 15px;
+    -fx-effect: dropshadow(gaussian, rgba(68,33,102,0.06), 8, 0, 0, 4);
+    -fx-alignment: TOP_CENTER;
+    -fx-pref-width: 260px; /* Width fixed thakbe layout consistency-r jonno */
+    -fx-min-height: 380px; /* Pref height-er poriborte min-height use kora safe */
+    -fx-cursor: hand;
+}
+
+.artcard:hover {
+    -fx-effect: dropshadow(gaussian, rgba(68,33,102,0.14), 18, 0, 0, 8);
+    -fx-translate-y: -6px;
+}
+
+.image-thumb {
+    -fx-fit-width: 230px;
+    -fx-fit-height: 160px; /* Height komano hoyeche jate niche label gulo overflow na hoy */
+    -fx-background-radius: 12px;
+}
+
+.title-label {
+    -fx-font-size: 16px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #240a4a;
+    -fx-wrap-text: true; /* Title boro hole niche neme ashbe */
+}
+
+.category-label {
+    -fx-font-size: 12px;
+    -fx-text-fill: #240a4a;
+    -fx-opacity: 0.8;
+}
+
+.price-label {
+    -fx-font-size: 22px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #4a1d7c;
+}
+
+.btn-edit {
+    -fx-background-color: linear-gradient(from 0% 0% to 100% 100%, #513381, #3f1977);
+    -fx-text-fill: white;
+    -fx-background-radius: 8px;
+    -fx-font-weight: 600;
+    -fx-cursor: hand;
+}
+
+.btn-delete {
+    -fx-background-color: linear-gradient(from 0% 0% to 100% 100%, #ff6b8a, #ff4f7a);
+    -fx-text-fill: white;
+    -fx-background-radius: 8px;
+    -fx-font-weight: 600;
+    -fx-cursor: hand;
+}

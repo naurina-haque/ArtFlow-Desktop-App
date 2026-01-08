@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+
+<VBox minHeight="316.0" prefHeight="385.0" prefWidth="296.0" spacing="8.0" styleClass="artcard" stylesheets="@ArtistArtcard.css" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1">
+    <children>
+      <VBox alignment="CENTER" prefHeight="253.0" prefWidth="230.0" style="-fx-border-color: white; -fx-border-radius: 20;">
+         <children>
+              <ImageView fx:id="cardImageView" fitHeight="230.0" fitWidth="189.0" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@img/WhatsApp%20Image%202025-12-26%20at%201.19.59%20AM.jpeg" />
+               </image>
+            </ImageView>
+         </children>
+      </VBox>
+
+        <Label fx:id="cardTitleLabel" maxWidth="Infinity" styleClass="title-label" text="Title" textFill="#753636">
+            <font>
+                <Font name="System Bold" size="18.0" />
+            </font></Label>
+
+        <Label fx:id="cardCategoryLabel" maxWidth="Infinity" prefHeight="48.0" prefWidth="240.0" styleClass="category-label" text="Category">
+         <font>
+            <Font size="18.0" />
+         </font></Label>
+
+        <Label fx:id="cardPriceLabel" maxWidth="Infinity" styleClass="price-label" text="Price">
+            <font>
+                <Font size="24.0" />
+            </font>
+        </Label>
+
+        <HBox alignment="CENTER_RIGHT" spacing="10.0" styleClass="action-buttons">
+            <children>
+                <Button fx:id="editButton" mnemonicParsing="false" prefHeight="25.0" prefWidth="149.0" styleClass="btn-edit" text="Edit" />
+                <Button fx:id="deleteButton" mnemonicParsing="false" prefHeight="25.0" prefWidth="147.0" styleClass="btn-delete" text="Delete" />
+            </children>
+        </HBox>
+    </children>
+    <padding>
+        <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+    </padding>
+</VBox>
