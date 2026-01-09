@@ -8,18 +8,15 @@
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.BorderPane?>
-<?import javafx.scene.layout.ColumnConstraints?>
 <?import javafx.scene.layout.FlowPane?>
-<?import javafx.scene.layout.GridPane?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.Region?>
-<?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
 <BorderPane minHeight="-Infinity" prefHeight="661.0" prefWidth="978.0" styleClass="artist-root" stylesheets="@ArtistMyArtwork.css" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.artflow.ArtistMyArtworkController">
 <left>
-    <VBox fx:id="sidebar" prefHeight="561.0" prefWidth="260.0" styleClass="sidebar" BorderPane.alignment="CENTER">
+    <VBox prefHeight="561.0" prefWidth="260.0" styleClass="sidebar" BorderPane.alignment="CENTER">
         <BorderPane.margin>
             <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
         </BorderPane.margin>
@@ -32,7 +29,7 @@
             <VBox prefHeight="384.0" prefWidth="236.0" spacing="6.0" styleClass="menu-list">
                 <children>
                     <Label prefHeight="30.0" prefWidth="142.0" styleClass="menubar" text="Menu Bar" />
-                    <HBox fx:id="dashboardHBox" prefHeight="47.0" prefWidth="228.0" styleClass="menu-hbox">
+                    <HBox prefHeight="47.0" prefWidth="228.0" styleClass="menu-hbox">
                         <children>
                             <ImageView fitHeight="17.0" fitWidth="24.0" opacity="0.48" pickOnBounds="true" preserveRatio="true">
                                 <image>
@@ -49,7 +46,7 @@
                             </Label>
                         </children>
                     </HBox>
-                    <HBox fx:id="artworksHBox" prefHeight="47.0" prefWidth="228.0" styleClass="menu-hbox">
+                    <HBox prefHeight="47.0" prefWidth="228.0" styleClass="menu-hbox">
                         <children>
                             <ImageView fitHeight="17.0" fitWidth="24.0" opacity="0.49" pickOnBounds="true" preserveRatio="true">
                                 <HBox.margin>
@@ -66,7 +63,7 @@
                             </Label>
                         </children>
                     </HBox>
-                    <HBox fx:id="ordersHBox" prefHeight="47.0" prefWidth="228.0" styleClass="menu-hbox">
+                    <HBox prefHeight="47.0" prefWidth="228.0" styleClass="menu-hbox">
                         <children>
                             <ImageView fitHeight="23.0" fitWidth="24.0" opacity="0.48" pickOnBounds="true" preserveRatio="true">
                                 <HBox.margin>
@@ -83,7 +80,7 @@
                             </Label>
                         </children>
                     </HBox>
-                    <HBox fx:id="earningsHBox" prefHeight="54.0" prefWidth="228.0" styleClass="menu-hbox">
+                    <HBox prefHeight="54.0" prefWidth="228.0" styleClass="menu-hbox">
                         <children>
                             <ImageView fitHeight="23.0" fitWidth="24.0" opacity="0.48" pickOnBounds="true" preserveRatio="true">
                                 <HBox.margin>
@@ -100,7 +97,7 @@
                             </Label>
                         </children>
                     </HBox>
-                    <HBox fx:id="profileHBox" prefHeight="54.0" prefWidth="228.0" styleClass="menu-hbox">
+                    <HBox prefHeight="54.0" prefWidth="228.0" styleClass="menu-hbox">
                         <children>
                             <ImageView fitHeight="23.0" fitWidth="24.0" opacity="0.48" pickOnBounds="true" preserveRatio="true">
                                 <HBox.margin>
@@ -117,7 +114,7 @@
                             </Label>
                         </children>
                     </HBox>
-                    <HBox fx:id="logoutHBox" prefHeight="54.0" prefWidth="228.0" styleClass="menu-hbox">
+                    <HBox prefHeight="54.0" prefWidth="228.0" styleClass="menu-hbox">
                         <children>
                             <ImageView fitHeight="23.0" fitWidth="24.0" opacity="0.48" pickOnBounds="true" preserveRatio="true">
                                 <HBox.margin>
@@ -127,7 +124,7 @@
                                     <Image url="@img/leave.png" />
                                 </image>
                             </ImageView>
-                            <Label fx:id="logoutLabel" alignment="CENTER" contentDisplay="CENTER" prefHeight="75.0" prefWidth="195.0" styleClass="menu-item" text="Logout" textFill="#ffffff" wrapText="true">
+                            <Label alignment="CENTER" contentDisplay="CENTER" prefHeight="75.0" prefWidth="195.0" styleClass="menu-item" text="Logout" textFill="#ffffff" wrapText="true">
                                 <font>
                                     <Font name="System Bold" size="16.0" />
                                 </font>
@@ -148,97 +145,87 @@
 
 
 <center>
-    <ScrollPane fitToWidth="true" hbarPolicy="ALWAYS" pannable="true" prefHeight="661.0" prefWidth="837.0" style="-fx-background: transparent; -fx-background-color: transparent;" vbarPolicy="ALWAYS" BorderPane.alignment="CENTER">
-        <content>
-            <VBox fillWidth="true" prefHeight="831.0" prefWidth="741.0" spacing="10.0" BorderPane.alignment="CENTER">
-                <BorderPane.margin>
-                    <Insets bottom="10.0" left="0" right="10.0" top="10.0" />
-                </BorderPane.margin>
-                <padding>
-                    <Insets bottom="20.0" left="20.0" right="20.0" top="10.0" />
-                </padding>
-                <HBox alignment="TOP_RIGHT" minHeight="-Infinity" minWidth="-Infinity" prefHeight="35.0" prefWidth="670.0">
-                    <children>
-                        <HBox alignment="TOP_RIGHT" minHeight="-Infinity" prefHeight="23.0" prefWidth="189.0" styleClass="profile-box">
-                            <children>
-                                <Label fx:id="profileNameLabel" alignment="CENTER" contentDisplay="CENTER" prefHeight="35.0" prefWidth="138.0" styleClass="profile-name" text="Artist Name" wrapText="true">
-                                    <font>
-                                        <Font name="System Bold" size="14.0" />
-                                    </font>
-                                </Label>
-                                <ImageView fitHeight="23.0" fitWidth="41.0" opacity="0.48" pickOnBounds="true" preserveRatio="true">
-                                    <HBox.margin>
-                                        <Insets right="10.0" top="3.0" />
-                                    </HBox.margin>
-                                    <image>
-                                        <Image url="@img/user.png" />
-                                    </image>
-                                </ImageView>
-                            </children>
-                        </HBox>
-                    </children>
-                    <VBox.margin>
-                        <Insets />
-                    </VBox.margin>
-                </HBox>
-                <VBox prefHeight="85.0" prefWidth="664.0" spacing="5.0">
-                    <children>
-                        <HBox alignment="CENTER_LEFT" prefHeight="78.0" prefWidth="896.0" spacing="8" VBox.vgrow="ALWAYS">
-                            <children>
-                                <Label fx:id="welcomeLabel" prefHeight="42.0" prefWidth="368.0" style="-fx-font-size: 34px; -fx-font-weight: bold; -fx-text-fill: #480f6b;" text="My ArtWorks" />
-                           <Region prefHeight="78.0" prefWidth="184.0" HBox.hgrow="ALWAYS" />
-                           <Button fx:id="addArtworkBtn" mnemonicParsing="false" onAction="#openAddArtwork" prefHeight="41.0" prefWidth="173.0" styleClass="add-art-btn" text="+ ADD ARTWORK">
+      <ScrollPane fx:id="centerScroll" fitToHeight="true" fitToWidth="true" BorderPane.alignment="CENTER">
+         <content>
+          <VBox fx:id="contentVBox" prefWidth="780" spacing="10.0">
+              <padding>
+                  <Insets bottom="10.0" left="20.0" right="20.0" top="10.0" />
+              </padding>
+
+              <!-- fixed header: profile, title and add button -->
+              <HBox alignment="TOP_RIGHT" prefHeight="35.0">
+                  <HBox alignment="TOP_RIGHT" prefHeight="23.0" prefWidth="189.0" styleClass="profile-box">
+                      <children>
+                          <Label alignment="CENTER" prefHeight="35.0" prefWidth="138.0" styleClass="profile-name" text="Artist Name" wrapText="true">
                               <font>
-                                 <Font size="18.0" />
+                                  <Font name="System Bold" size="14.0" />
                               </font>
-                           </Button>
-                            </children>
-                        </HBox>
-                    </children>
-                </VBox>
+                          </Label>
+                          <ImageView fitHeight="23.0" fitWidth="41.0" opacity="0.48" pickOnBounds="true" preserveRatio="true">
+                              <HBox.margin>
+                                  <Insets right="10.0" top="3.0" />
+                              </HBox.margin>
+                              <image>
+                                  <Image url="@img/user.png" />
+                              </image>
+                          </ImageView>
+                      </children>
+                  </HBox>
+              </HBox>
 
-                <TextField fx:id="searchField" onAction="#handleSearchAction" prefHeight="42.0" prefWidth="640.0" promptText="Search artworks" styleClass="search-field">
-                    <font>
-                        <Font size="16.0" />
-                    </font>
-                </TextField>
+              <HBox alignment="CENTER_LEFT" minHeight="93.0" prefHeight="93.0" prefWidth="658.0" spacing="8">
+                  <children>
+                      <Label style="-fx-font-size: 34px; -fx-font-weight: bold; -fx-text-fill: #480f6b;" text="My ArtWorks" />
+                      <Region HBox.hgrow="ALWAYS" />
+                      <Button fx:id="addArtworkBtn" mnemonicParsing="false" onAction="#openAddArtwork" prefHeight="41.0" prefWidth="173.0" styleClass="add-art-btn" text="+ ADD ARTWORK">
+                          <font>
+                              <Font size="18.0" />
+                          </font>
+                      </Button>
+                  </children>
+              </HBox>
 
-                <Label prefHeight="28.0" prefWidth="118.0" styleClass="category-label" text="Category:" />
+              <!-- fixed search and category row -->
+              <TextField fx:id="searchField" minHeight="42.0" onAction="#handleSearchAction" prefHeight="42.0" promptText="Search artworks" styleClass="search-field">
+                  <font>
+                      <Font size="16.0" />
+                  </font>
+              </TextField>
 
-                <ScrollPane fitToWidth="true" hbarPolicy="ALWAYS" prefHeight="66.0" prefWidth="637.0" vbarPolicy="NEVER">
-                    <content>
-                        <HBox fx:id="categoryHBox" minWidth="-Infinity" prefHeight="51.0" prefWidth="1229.0" spacing="10.0">
-                            <children>
-                                <Label alignment="CENTER" prefHeight="38.0" prefWidth="68.0" styleClass="category-chip" text="All">
-                                    <font>
-                                        <Font size="14.0" />
-                                    </font>
-                                </Label>
-                                <Label alignment="CENTER" prefHeight="38.0" prefWidth="184.0" styleClass="category-chip" text="Coloured Portrait Art" />
-                                <Label alignment="CENTER" prefHeight="38.0" prefWidth="154.0" styleClass="category-chip" text="B&amp;W Portrait Art" />
-                                <Label alignment="CENTER" prefHeight="38.0" prefWidth="112.0" styleClass="category-chip" text="Digital Art" />
-                                <Label alignment="CENTER" prefHeight="31.0" prefWidth="138.0" styleClass="category-chip" text="Landscape Art" />
-                                <Label alignment="CENTER" prefHeight="31.0" prefWidth="132.0" styleClass="category-chip" text="Watercolor Art" />
-                                <Label alignment="CENTER" prefHeight="31.0" prefWidth="108.0" styleClass="category-chip" text="Acrylic Art" />
-                                <Label alignment="CENTER" prefHeight="31.0" prefWidth="91.0" styleClass="category-chip" text="Line Art" />
-                                <Label alignment="CENTER" prefHeight="31.0" prefWidth="149.0" styleClass="category-chip" text="Pencil Sketch Art" />
-                            </children>
-                            <padding>
-                                <Insets left="10.0" right="10.0" />
-                            </padding>
-                        </HBox>
-                    </content>
-                </ScrollPane>
-               <FlowPane fx:id="artworksFlow" hgap="18" vgap="18" prefHeight="327.0" prefWidth="670.0" VBox.vgrow="ALWAYS" orientation="HORIZONTAL">
-                 <padding>
-                   <Insets />
-                 </padding>
-               </FlowPane>
-                 <padding>
-                     <Insets bottom="20.0" left="10.0" right="20.0" top="20.0" />
-                 </padding>
-             </VBox>
+              <Label minHeight="40.0" prefHeight="28.0" styleClass="category-label" text="Category:" />
+
+              <ScrollPane fitToWidth="true" hbarPolicy="ALWAYS" minHeight="66.0" prefHeight="66.0" vbarPolicy="NEVER">
+                  <content>
+                      <HBox fx:id="categoryHBox" minWidth="-Infinity" prefHeight="45.0" prefWidth="1236.0" spacing="10.0">
+                          <children>
+                              <Label alignment="CENTER" onMouseClicked="#handleCategoryClick" prefHeight="38.0" prefWidth="68.0" styleClass="category-chip" text="All">
+                                   <font>
+                                       <Font size="14.0" />
+                                   </font>
+                               </Label>
+                              <Label alignment="CENTER" onMouseClicked="#handleCategoryClick" prefHeight="38.0" prefWidth="184.0" styleClass="category-chip" text="Coloured Portrait Art" />
+                              <Label alignment="CENTER" onMouseClicked="#handleCategoryClick" prefHeight="38.0" prefWidth="154.0" styleClass="category-chip" text="B&amp;W Portrait Art" />
+                              <Label alignment="CENTER" onMouseClicked="#handleCategoryClick" prefHeight="38.0" prefWidth="112.0" styleClass="category-chip" text="Digital Art" />
+                              <Label alignment="CENTER" onMouseClicked="#handleCategoryClick" prefHeight="31.0" prefWidth="138.0" styleClass="category-chip" text="Landscape Art" />
+                              <Label alignment="CENTER" onMouseClicked="#handleCategoryClick" prefHeight="31.0" prefWidth="132.0" styleClass="category-chip" text="Watercolor Art" />
+                              <Label alignment="CENTER" onMouseClicked="#handleCategoryClick" prefHeight="31.0" prefWidth="108.0" styleClass="category-chip" text="Acrylic Art" />
+                              <Label alignment="CENTER" onMouseClicked="#handleCategoryClick" prefHeight="31.0" prefWidth="91.0" styleClass="category-chip" text="Line Art" />
+                              <Label alignment="CENTER" onMouseClicked="#handleCategoryClick" prefHeight="31.0" prefWidth="149.0" styleClass="category-chip" text="Pencil Sketch Art" />
+                          </children>
+                          <padding>
+                              <Insets left="10.0" right="10.0" />
+                          </padding>
+                      </HBox>
+                  </content>
+              </ScrollPane>
+                <FlowPane fx:id="artworksFlow" hgap="15.0" orientation="HORIZONTAL" prefHeight="397.0" prefWidth="740.0" vgap="18">
+                    <padding>
+                        <Insets bottom="10.0" top="10.0" />
+                    </padding>
+                </FlowPane>
+
+          </VBox>
          </content>
-     </ScrollPane>
- </center>
+      </ScrollPane>
+</center>
  </BorderPane>

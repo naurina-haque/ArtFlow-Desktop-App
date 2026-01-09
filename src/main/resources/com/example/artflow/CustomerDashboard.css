@@ -140,8 +140,9 @@
     /* darker hover for stronger contrast */
     -fx-background-color: linear-gradient(from 0% 0% to 100% 100%, #07645a, #044d45);
     -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.28), 10, 0, 2, 4);
-    -fx-border-color: rgba(255,255,255,0.14);
-    -fx-border-width: 1px;
+    -fx-border-color: rgb(255, 255, 255);
+    -fx-border-width: 2px;
+    -fx-border-radius: 20px;
     -fx-font-weight: bold;
     -fx-translate-y: -2px;
 }

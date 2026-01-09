@@ -14,21 +14,32 @@ import javafx.stage.Stage;
 
 import java.io.IOException;
 import java.net.URL;
+import java.io.PrintWriter;
+import java.io.StringWriter;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import java.util.Locale;
 
+@SuppressWarnings("unused")
 public class ArtistDashboardController {
 
+    @SuppressWarnings("unused")
     @FXML
     private AnchorPane manifestModal;
 
+    @SuppressWarnings("unused")
     @FXML
     private Button manifestBtn;
 
+    @SuppressWarnings("unused")
     @FXML
     private Button closeModalBtn;
 
+    @SuppressWarnings("unused")
     @FXML
     private Button composeBtn;
 
+    @SuppressWarnings("unused")
     @FXML
     private VBox sidebar;
 
@@ -62,6 +73,7 @@ public class ArtistDashboardController {
     @FXML
     private Label logoutLabel;
 
+    private static final Logger LOGGER = Logger.getLogger(ArtistDashboardController.class.getName());
     private String currentUserType;
 
     @FXML
@@ -145,7 +157,7 @@ public class ArtistDashboardController {
             stage.setWidth(width);
 
         } catch (IOException e) {
-            e.printStackTrace();
+            LOGGER.log(Level.SEVERE, "Logout error", e);
             showAlert(Alert.AlertType.ERROR, "Logout error", e.getMessage());
         }
     }
@@ -153,51 +165,84 @@ public class ArtistDashboardController {
     @FXML
     private void openMyArtworks(MouseEvent event) {
         System.out.println("Opening My Artworks from side menu");
-        try {
-            Stage stage = null;
-            if (event != null && event.getSource() != null) {
-                Object src = event.getSource();
-                if (src instanceof javafx.scene.Node) {
-                    stage = (Stage) ((javafx.scene.Node) src).getScene().getWindow();
-                }
+        Stage stage = null;
+        if (event != null && event.getSource() != null) {
+            Object src = event.getSource();
+            if (src instanceof javafx.scene.Node) {
+                stage = (Stage) ((javafx.scene.Node) src).getScene().getWindow();
             }
-
-            if (stage == null) {
-                System.err.println("openMyArtworks: could not determine Stage from event; falling back to profileNameLabel");
-                if (profileNameLabel != null && profileNameLabel.getScene() != null) {
-                    stage = (Stage) profileNameLabel.getScene().getWindow();
-                }
-            }
-
-            if (stage == null) {
-                System.err.println("openMyArtworks failed: no stage available");
-                showAlert(Alert.AlertType.ERROR, "Navigation failed", "Unable to determine application window for navigation.");
-                return;
-            }
-
-            String resourcePath = "/com/example/artflow/ArtistMyArtwork.fxml";
-            URL resUrl = getClass().getResource(resourcePath);
-            if (resUrl == null) {
-                String msg = "MyArtwork FXML resource not found at: " + resourcePath;
-                System.err.println(msg);
-                showAlert(Alert.AlertType.ERROR, "Navigation error", msg);
-                return;
-            }
-
-            System.out.println("Loading MyArtworks FXML: " + resUrl);
-            FXMLLoader loader = new FXMLLoader(resUrl);
-            Scene scene = new Scene(loader.load(), stage.getWidth(), stage.getHeight());
-
-            // optionally set controller state (e.g., profile name) if needed
-            ArtistMyArtworkController controller = loader.getController();
-            controller.initialize(); // safe to call; it has guards
-
-            stage.setScene(scene);
-
-        } catch (IOException e) {
-            e.printStackTrace();
-            showAlert(Alert.AlertType.ERROR, "Navigation error", e.getMessage());
         }
+
+        if (stage == null) {
+            System.err.println("openMyArtworks: could not determine Stage from event; falling back to profileNameLabel");
+            if (profileNameLabel != null && profileNameLabel.getScene() != null) {
+                stage = (Stage) profileNameLabel.getScene().getWindow();
+            }
+        }
+
+        if (stage == null) {
+            System.err.println("openMyArtworks failed: no stage available");
+            showAlert(Alert.AlertType.ERROR, "Navigation failed", "Unable to determine application window for navigation.");
+            return;
+        }
+
+        String resourcePath = "/com/example/artflow/ArtistMyArtwork.fxml";
+        URL resUrl = getClass().getResource(resourcePath);
+        if (resUrl == null) {
+            String msg = "MyArtwork FXML resource not found at: " + resourcePath;
+            System.err.println(msg);
+            showAlert(Alert.AlertType.ERROR, "Navigation error", msg);
+            return;
+        }
+
+        System.out.println("Loading MyArtworks FXML: " + resUrl);
+        FXMLLoader loader = new FXMLLoader(resUrl);
+        Scene scene;
+        try {
+            scene = new Scene(loader.load(), stage.getWidth(), stage.getHeight());
+        } catch (Exception ex) {
+            LOGGER.log(Level.SEVERE, "Failed to load MyArtworks", ex);
+            StringWriter sw = new StringWriter();
+            ex.printStackTrace(new PrintWriter(sw));
+            showAlert(Alert.AlertType.ERROR, "Navigation error", "Failed to load MyArtworks: " + ex.getMessage() + "\nSee details in console.");
+            // also print stacktrace to a dialog for convenience
+            Alert a = new Alert(Alert.AlertType.ERROR);
+            a.setTitle("Load error");
+            a.setHeaderText("Failed to open My Artworks");
+            a.getDialogPane().setPrefWidth(600);
+            a.setContentText(sw.toString());
+            a.showAndWait();
+            return;
+        }
+
+        // controller's initialize() is invoked by FXMLLoader; ask it to select the 'artworks' sidebar
+        ArtistMyArtworkController controller = loader.getController();
+        if (controller != null) controller.selectMenu("artworks");
+        stage.setScene(scene);
+
+    }
+
+    // Allow other views to ask this dashboard to highlight a sidebar item if needed
+    public void selectMenu(String menuKey) {
+        if (menuKey == null) return;
+        try {
+            // clear existing selection
+            if (dashboardHBox != null) dashboardHBox.getStyleClass().remove("selected");
+            if (artworksHBox != null) artworksHBox.getStyleClass().remove("selected");
+            if (ordersHBox != null) ordersHBox.getStyleClass().remove("selected");
+            if (earningsHBox != null) earningsHBox.getStyleClass().remove("selected");
+            if (profileHBox != null) profileHBox.getStyleClass().remove("selected");
+            if (logoutHBox != null) logoutHBox.getStyleClass().remove("selected");
+
+            switch (menuKey.toLowerCase(Locale.ROOT)) {
+                case "dashboard": if (dashboardHBox != null) dashboardHBox.getStyleClass().add("selected"); break;
+                case "artworks": if (artworksHBox != null) artworksHBox.getStyleClass().add("selected"); break;
+                case "orders": if (ordersHBox != null) ordersHBox.getStyleClass().add("selected"); break;
+                case "earnings": if (earningsHBox != null) earningsHBox.getStyleClass().add("selected"); break;
+                case "profile": if (profileHBox != null) profileHBox.getStyleClass().add("selected"); break;
+                default: break;
+            }
+        } catch (Exception ignored) {}
     }
 
     private void showAlert(Alert.AlertType type, String title, String message) {

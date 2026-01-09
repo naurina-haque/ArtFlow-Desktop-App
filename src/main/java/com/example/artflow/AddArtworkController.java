@@ -1,11 +1,10 @@
 package com.example.artflow;
 
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
-import javafx.scene.Parent;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
+import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.VBox;
 import javafx.stage.FileChooser;
@@ -18,20 +17,27 @@ import javafx.scene.input.TransferMode;
 import javafx.scene.input.MouseEvent;
 import javafx.stage.Window;
 import javafx.event.ActionEvent;
-import javafx.scene.control.Alert;
-import javafx.scene.control.ButtonType;
 import javafx.scene.layout.FlowPane;
 
 import java.io.File;
-import java.io.IOException;
+import java.util.function.Consumer;
 
 public class AddArtworkController {
 
     @FXML
-    public VBox previewHolder;
+    public VBox previewHolder; // container with controls
+
+    @FXML
+    public VBox previewCardContainer; // hosts preview ImageView
+
+    @FXML
+    public ImageView previewImageView; // NEW: direct ImageView to show uploaded image
 
     @FXML
     public TextField titleField;
+
+    @FXML
+    public TextArea descriptionArea;
 
     @FXML
     public TextField priceField;
@@ -57,9 +63,21 @@ public class AddArtworkController {
     @FXML
     public javafx.scene.control.Label uploadStatusLabel;
 
+    @FXML
+    public Label headerLabel;
+
+    @FXML
+    public Label imageSectionLabel;
+
+    // flag to ignore the click immediately after a drag-drop to prevent opening file chooser twice
+    private volatile boolean droppedJustNow = false;
+
     private File chosenImageFile;
     private ArtistMyArtworkController parentController;
     private FlowPane parentArtworksFlow;
+    private boolean editMode = false;
+    private String editingId = null;
+    private Consumer<ArtworkModel> editCallback = null;
 
     public void setParentController(ArtistMyArtworkController parent) {
         this.parentController = parent;
@@ -67,23 +85,44 @@ public class AddArtworkController {
 
     public void setParentArtworksFlow(FlowPane flow) {
         this.parentArtworksFlow = flow;
-        // also inform parent controller if present
-        if (this.parentController != null && flow != null) {
+    }
+
+    public void loadForEdit(ArtworkModel model, Consumer<ArtworkModel> onSaveCallback) {
+        if (model == null) return;
+        editMode = true;
+        editingId = model.getId();
+        titleField.setText(model.getTitle());
+        if (descriptionArea != null) descriptionArea.setText(model.getDescription() == null ? "" : model.getDescription());
+        priceField.setText(model.getPrice());
+        categoryCombo.getSelectionModel().select(model.getCategory());
+        if (model.getImagePath() != null) {
             try {
-                // attempt to set parent's artworksFlow via reflection-like access if needed
-                // but simpler: ensure parent's field is non-null by calling a small helper if available
-                // we'll rely on parentController.addArtworkNode which checks artworksFlow.
-            } catch (Exception ignored) {
+                chosenImageFile = new File(new java.net.URI(model.getImagePath()));
+            } catch (Exception ignored) { chosenImageFile = null; }
+            // show preview image
+            if (chosenImageFile != null) {
+                setPreviewImage(chosenImageFile);
             }
         }
+        this.editCallback = onSaveCallback;
+        // update UI to reflect edit mode
+        if (headerLabel != null) headerLabel.setText("Edit Art");
+        if (saveBtn != null) saveBtn.setText("Save");
+        if (imageSectionLabel != null) imageSectionLabel.setText("Edit Image");
     }
 
     @FXML
     private void initialize() {
         // guard: avoid running design-time/runtime-only code when opened in SceneBuilder
         if (categoryCombo == null || titleField == null || priceField == null) {
+            System.out.println("AddArtworkController: running in design mode or missing controls");
             return;
         }
+
+        // ensure defaults for add mode
+        if (headerLabel != null) headerLabel.setText("Create New Artwork");
+        if (saveBtn != null) saveBtn.setText("🚀 Publish Artwork");
+        if (imageSectionLabel != null) imageSectionLabel.setText("📷 Artwork Image");
 
         // populate categories
         categoryCombo.getItems().addAll(
@@ -99,10 +138,10 @@ public class AddArtworkController {
         );
         categoryCombo.getSelectionModel().selectFirst();
 
-        // wire up listeners to update preview
-        titleField.textProperty().addListener((obs, oldV, newV) -> updatePreviewCardFromFields());
-        priceField.textProperty().addListener((obs, oldV, newV) -> updatePreviewCardFromFields());
-        categoryCombo.valueProperty().addListener((obs, oldV, newV) -> updatePreviewCardFromFields());
+        // wire up listeners to update preview (title/price/category only affect preview text when using artcard; we'll keep hooks)
+        titleField.textProperty().addListener((obs, oldV, newV) -> {});
+        priceField.textProperty().addListener((obs, oldV, newV) -> {});
+        categoryCombo.valueProperty().addListener((obs, oldV, newV) -> {});
 
         // drag & drop handling on dropArea
         if (dropArea != null) {
@@ -119,22 +158,25 @@ public class AddArtworkController {
 
         if (removeImageBtn != null) {
             removeImageBtn.setOnAction(e -> {
+                // remove chosen image, clear preview image view and show drop area again
+                System.out.println("Remove clicked (lambda)");
                 chosenImageFile = null;
-                // If there is a preview card, clear only the image inside it (keep title, category, price)
-                if (previewHolder != null && !previewHolder.getChildren().isEmpty()) {
-                    javafx.scene.Node node = previewHolder.getChildren().get(0);
-                    if (node != null) {
-                        javafx.scene.Node imgNode = node.lookup("#cardImageView");
-                        if (imgNode instanceof ImageView) {
-                            ((ImageView) imgNode).setImage(null);
-                        }
-                    }
-                } else {
-                    // fallback: clear previewHolder if nothing specific to update
-                    if (previewHolder != null) previewHolder.getChildren().clear();
+                if (previewImageView != null) previewImageView.setImage(null);
+                if (previewCardContainer != null) {
+                    previewCardContainer.setVisible(false);
+                    previewCardContainer.setManaged(false);
                 }
+                if (dropArea != null) {
+                    dropArea.setVisible(true);
+                    dropArea.setManaged(true);
+                }
+                if (uploadStatusLabel != null) uploadStatusLabel.setText("Image removed");
             });
         }
+
+        // initial state: dropArea visible, preview hidden
+        if (dropArea != null) { dropArea.setVisible(true); dropArea.setManaged(true); }
+        if (previewCardContainer != null) { previewCardContainer.setVisible(false); previewCardContainer.setManaged(false); }
     }
 
     @FXML
@@ -165,29 +207,19 @@ public class AddArtworkController {
                 f = chooser.showOpenDialog(owner);
             }
             if (f == null) {
-                // fallback to open without owner
-                System.out.println("showOpenDialog with owner returned null or owner not found, trying without owner");
                 if (uploadStatusLabel != null) uploadStatusLabel.setText("Opening file chooser (no owner)...");
                 f = chooser.showOpenDialog(null);
             }
 
             if (f != null) {
+                System.out.println("File chosen: " + f.getAbsolutePath());
                 chosenImageFile = f;
-                System.out.println("Selected image: " + f.getAbsolutePath());
                 if (uploadStatusLabel != null) uploadStatusLabel.setText("Selected: " + f.getName());
-                updatePreviewImage(f);
-                Alert info = new Alert(Alert.AlertType.INFORMATION, "Selected image: " + f.getAbsolutePath(), ButtonType.OK);
-                info.setHeaderText("Image selected");
-                info.showAndWait();
+                setPreviewImage(f);
             } else {
-                System.out.println("File chooser returned no selection (user cancelled or closed dialog)");
                 if (uploadStatusLabel != null) uploadStatusLabel.setText("No file selected");
-                Alert info = new Alert(Alert.AlertType.INFORMATION, "No file selected or file chooser closed.", ButtonType.OK);
-                info.setHeaderText("No selection");
-                info.showAndWait();
             }
         } catch (Exception ex) {
-            System.err.println("Error showing file chooser: " + ex.getMessage());
             ex.printStackTrace();
             if (uploadStatusLabel != null) uploadStatusLabel.setText("Error opening file chooser: " + ex.getMessage());
         }
@@ -195,6 +227,11 @@ public class AddArtworkController {
 
     @FXML
     private void onDropAreaClicked(MouseEvent event) {
+        // If we just handled a drop, ignore the click to avoid opening file chooser twice
+        if (droppedJustNow) {
+            droppedJustNow = false;
+            return;
+        }
         // delegate to same logic as the Upload button
         onChooseImage(null);
     }
@@ -208,74 +245,114 @@ public class AddArtworkController {
     }
 
     private void onDragDropped(DragEvent event) {
+        System.out.println("onDragDropped called");
         Dragboard db = event.getDragboard();
         boolean success = false;
         if (db.hasFiles()) {
             File f = db.getFiles().get(0);
+            System.out.println("File dropped: " + f.getAbsolutePath());
             chosenImageFile = f;
-            updatePreviewImage(f);
+            setPreviewImage(f);
             success = true;
+            // set flag so the following click doesn't re-open file chooser
+            droppedJustNow = true;
         }
         event.setDropCompleted(success);
         event.consume();
     }
 
-    private void updatePreviewCardFromFields() {
-        Image img = null;
-        if (chosenImageFile != null) {
-            img = new Image(chosenImageFile.toURI().toString(), 242, 180, true, true);
-        }
-        loadPreviewCard(img, titleField.getText().isEmpty() ? "Title" : titleField.getText(), priceField.getText().isEmpty() ? "0" : priceField.getText(), categoryCombo.getValue());
-    }
-
-    private void updatePreviewImage(File f) {
+    private void setPreviewImage(File f) {
+        System.out.println("setPreviewImage called; file=" + (f == null ? "null" : f.getAbsolutePath()));
         if (f == null) return;
         try {
-            Image img = new Image(f.toURI().toString(), 242, 180, true, true);
-            loadPreviewCard(img, titleField.getText().isEmpty() ? "Title" : titleField.getText(), priceField.getText().isEmpty() ? "0" : priceField.getText(), categoryCombo.getValue());
+            // load image synchronously (no background loading) to ensure dimensions available
+            Image img = new Image(f.toURI().toString(), 0, 0, true, true, false);
+            System.out.println("Image loaded: width=" + img.getWidth() + ", height=" + img.getHeight());
+            javafx.application.Platform.runLater(() -> {
+                try {
+                    if (previewImageView == null) {
+                        // try lookup from scene as a fallback
+                        if (previewHolder != null && previewHolder.getScene() != null) {
+                            javafx.scene.Node looked = previewHolder.getScene().lookup("#previewImageView");
+                            if (looked instanceof ImageView) {
+                                previewImageView = (ImageView) looked;
+                                System.out.println("previewImageView located via scene.lookup");
+                            }
+                        }
+                    }
+                } catch (Exception lookupEx) {
+                    System.out.println("previewImageView lookup failed: " + lookupEx.getMessage());
+                }
+                if (previewImageView != null) {
+                    System.out.println("previewImageView available — setting image");
+                    previewImageView.setImage(img);
+                    previewImageView.setSmooth(true);
+                    previewImageView.setPreserveRatio(true);
+                    // bind fitWidth to container width minus some padding so it fits
+                    try {
+                        if (previewCardContainer != null) {
+                            previewImageView.fitWidthProperty().bind(previewCardContainer.widthProperty().subtract(20));
+                        } else {
+                            previewImageView.setFitWidth(300);
+                        }
+                    } catch (Exception bindEx) {
+                        previewImageView.setFitWidth(300);
+                    }
+                    previewImageView.setVisible(true);
+                } else {
+                    System.out.println("previewImageView is null even after lookup — creating one programmatically");
+                    if (previewCardContainer != null) {
+                        ImageView iv = new ImageView(img);
+                        iv.setSmooth(true);
+                        iv.setPreserveRatio(true);
+                        iv.setFitHeight(220);
+                        try { iv.fitWidthProperty().bind(previewCardContainer.widthProperty().subtract(20)); } catch (Exception ignore) {}
+                        previewCardContainer.getChildren().clear();
+                        previewCardContainer.getChildren().add(iv);
+                        previewImageView = iv; // keep reference
+                    }
+                }
+                // show preview container, hide drop area
+                if (previewCardContainer != null) {
+                    System.out.println("Showing previewCardContainer");
+                    previewCardContainer.setVisible(true);
+                    previewCardContainer.setManaged(true);
+                    previewCardContainer.toFront();
+                } else {
+                    System.out.println("previewCardContainer is null");
+                }
+                if (dropArea != null) {
+                    System.out.println("Hiding dropArea");
+                    dropArea.setVisible(false);
+                    dropArea.setManaged(false);
+                } else {
+                    System.out.println("dropArea is null");
+                }
+                if (previewHolder != null) previewHolder.requestLayout();
+                System.out.println("Preview visibility: imageViewVisible=" + (previewImageView != null && previewImageView.isVisible()) + ", containerVisible=" + (previewCardContainer != null && previewCardContainer.isVisible()));
+            });
         } catch (Exception ex) {
-            System.err.println("Error loading preview image: " + ex.getMessage());
-        }
-    }
-
-    private void loadPreviewCard(Image img, String title, String price, String category) {
-        try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/example/artflow/ArtistArtcard.fxml"));
-            Parent card = loader.load();
-
-            // set values
-            javafx.scene.Node imageView = card.lookup("#cardImageView");
-            if (imageView instanceof ImageView && img != null) {
-                ((ImageView) imageView).setImage(img);
-            }
-            javafx.scene.Node titleLbl = card.lookup("#cardTitleLabel");
-            if (titleLbl instanceof Label) ((Label) titleLbl).setText(title);
-            javafx.scene.Node catLbl = card.lookup("#cardCategoryLabel");
-            if (catLbl instanceof Label) ((Label) catLbl).setText(category);
-            javafx.scene.Node priceLbl = card.lookup("#cardPriceLabel");
-            if (priceLbl instanceof Label) ((Label) priceLbl).setText("$" + price);
-
-            // store metadata for filtering
-            card.setUserData(category);
-
-            previewHolder.getChildren().clear();
-            previewHolder.getChildren().add(card);
-        } catch (IOException e) {
-            System.err.println("Error loading art card for preview: " + e.getMessage());
+            ex.printStackTrace();
         }
     }
 
     @FXML
     private void onSave() {
-        System.out.println("AddArtworkController.onSave called. parentController=" + (parentController != null));
         // Create a lightweight model and hand to parent to render (avoids reparenting nodes)
         String imgPath = null;
         if (chosenImageFile != null) {
             imgPath = chosenImageFile.toURI().toString();
         }
-        ArtworkModel model = new ArtworkModel(titleField.getText(), priceField.getText(), categoryCombo.getValue(), imgPath);
-        // add to central store; listeners (like ArtistMyArtworkController) will receive updates
-        ArtworkStore.getInstance().add(model);
+        ArtworkModel model;
+        String desc = descriptionArea == null ? null : descriptionArea.getText();
+        if (editMode && editingId != null) {
+            model = new ArtworkModel(editingId, titleField.getText(), priceField.getText(), categoryCombo.getValue(), imgPath, CurrentUser.getFullName(), desc);
+            ArtworkStore.getInstance().update(model);
+            if (editCallback != null) editCallback.accept(model);
+        } else {
+            model = new ArtworkModel(titleField.getText(), priceField.getText(), categoryCombo.getValue(), imgPath, CurrentUser.getFullName(), desc);
+            ArtworkStore.getInstance().add(model);
+        }
 
         // close dialog
         Stage stage = (Stage) previewHolder.getScene().getWindow();
@@ -287,5 +364,22 @@ public class AddArtworkController {
     private void onCancel() {
         Stage stage = (Stage) previewHolder.getScene().getWindow();
         stage.close();
+    }
+
+    @FXML
+    private void onRemoveImage(ActionEvent event) {
+        System.out.println("onRemoveImage called");
+        // same behavior as removeImageBtn action but compatible with FXML handler signature
+        chosenImageFile = null;
+        if (previewImageView != null) previewImageView.setImage(null);
+        if (previewCardContainer != null) {
+            previewCardContainer.setVisible(false);
+            previewCardContainer.setManaged(false);
+        }
+        if (dropArea != null) {
+            dropArea.setVisible(true);
+            dropArea.setManaged(true);
+        }
+        if (uploadStatusLabel != null) uploadStatusLabel.setText("Image removed");
     }
 }

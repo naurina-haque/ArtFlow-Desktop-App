@@ -13,6 +13,7 @@ module com.example.artflow {
     requires javafx.graphics;
     requires java.sql;
     requires org.xerial.sqlitejdbc;
+    requires java.desktop;
 
     opens com.example.artflow to javafx.fxml;
     exports com.example.artflow;

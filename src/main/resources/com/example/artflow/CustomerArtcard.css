@@ -1,0 +1,59 @@
+.customer-artcard {
+    -fx-background-color: white;
+    -fx-background-radius: 16px;
+    -fx-padding: 12px;
+    -fx-effect: dropshadow(gaussian, rgba(68,33,102,0.06), 8, 0, 0, 4);
+    -fx-alignment: TOP_CENTER;
+    -fx-pref-width: 250px;
+}
+
+.customer-artcard:hover {
+    -fx-effect: dropshadow(gaussian, rgba(68,33,102,0.14), 18, 0, 0, 8);
+    -fx-translate-y: -6px;
+}
+
+.customer-artcard .title-label {
+    -fx-font-size: 16px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #240a4a;
+}
+
+.customer-artcard .category-label {
+    -fx-font-size: 12px;
+    -fx-text-fill: #240a4a;
+    -fx-opacity: 0.8;
+}
+
+.customer-artcard .price-label {
+    -fx-font-size: 20px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #4a1d7c;
+}
+
+.customer-artcard .btn-buy { -fx-background-color: #0dbc65; -fx-text-fill: white; }
+
+.customer-artcard .artist-label {
+    -fx-font-size: 12px;
+    -fx-text-fill: #6b3b8a;
+    -fx-opacity: 0.95;
+    -fx-padding: 0 0 4 0;
+}
+
+.details-root {
+    -fx-background-color: linear-gradient(to bottom right, #faf7ff, #f2eaff);
+    -fx-padding: 18px;
+    -fx-background-radius: 12px;
+}
+
+.detail-title {
+    -fx-font-size: 22px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #2b0b5b;
+}
+
+.detail-total {
+    -fx-font-size: 18px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #2a7d36;
+    -fx-padding: 0 0 0 8px;
+}

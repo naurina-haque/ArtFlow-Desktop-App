@@ -9,13 +9,13 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<VBox minHeight="316.0" prefHeight="385.0" prefWidth="296.0" spacing="8.0" styleClass="artcard" stylesheets="@ArtistArtcard.css" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1">
+<VBox minHeight="336.0" prefHeight="380.0" prefWidth="46.0" spacing="8.0" styleClass="artcard" stylesheets="@ArtistArtcard.css" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1">
     <children>
-      <VBox alignment="CENTER" prefHeight="253.0" prefWidth="230.0" style="-fx-border-color: white; -fx-border-radius: 20;">
+      <VBox alignment="CENTER" prefHeight="379.0" prefWidth="230.0" style="-fx-border-color: white; -fx-border-radius: 20;">
          <children>
-              <ImageView fx:id="cardImageView" fitHeight="230.0" fitWidth="189.0" pickOnBounds="true" preserveRatio="true">
+              <ImageView fx:id="cardImageView" fitHeight="219.0" fitWidth="189.0" pickOnBounds="true" preserveRatio="true">
                <image>
-                  <Image url="@img/WhatsApp%20Image%202025-12-26%20at%201.19.59%20AM.jpeg" />
+                  <Image url="@img/WhatsApp%20Image%202025-12-26%20at%201.19.59%20AM%20(1).jpeg" />
                </image>
             </ImageView>
          </children>

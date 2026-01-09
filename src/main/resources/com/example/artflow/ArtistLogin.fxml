@@ -59,7 +59,7 @@
                               <Font name="System Bold" size="18.0" />
                            </font>
                         </Button>
-                        <Button fx:id="login" mnemonicParsing="false" prefHeight="17.0" prefWidth="151.0" style="-fx-background-color: #411682; -fx-background-radius: 30;" text="Login">
+                        <Button fx:id="login" onAction="#onLogin" mnemonicParsing="false" prefHeight="17.0" prefWidth="151.0" style="-fx-background-color: #411682; -fx-background-radius: 30;" text="Login">
                            <font>
                               <Font name="System Bold" size="18.0" />
                            </font>

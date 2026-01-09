@@ -12,8 +12,12 @@ import javafx.scene.image.ImageView;
 import javafx.stage.Stage;
 
 import java.io.IOException;
+import java.net.URL;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public class CustomerLoginController {
+    private static final Logger LOGGER = Logger.getLogger(CustomerLoginController.class.getName());
         @FXML
         private Button back2;
         @FXML
@@ -90,29 +94,49 @@ public class CustomerLoginController {
             }
 
             String fullName = dbHelper.loginUser(email, password, "customer");
-            if (fullName != null) {
-                try {
-                    Stage stage = (Stage) login2.getScene().getWindow();
-                    FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/example/artflow/CustomerDashboard.fxml"));
-                    Scene scene= new Scene(loader.load(),600,400);
-                    // CustomerDashboard.fxml uses ArtistDashboardController for the shared layout
-                    ArtistDashboardController controller = loader.getController();
-                    controller.setProfileName(fullName);
-                    String firstName = fullName.split(" ")[0];
-                    controller.setWelcomeFirstName(firstName);
-                    controller.setCurrentUserType("customer");
+            if (fullName == null) {
+                showAlert(Alert.AlertType.ERROR, "Login failed", "Invalid credentials or user not found.");
+                return;
+            }
 
-                    double width = stage.getWidth();
-                    double height = stage.getHeight();
-                    stage.setScene(scene);
-                    stage.setHeight(height);
-                    stage.setWidth(width);
-                } catch (IOException ex) {
-                    ex.printStackTrace();
-                    showAlert(Alert.AlertType.ERROR, "Error", "Unable to open dashboard: " + ex.getMessage());
+            // Try to load CustomerDashboard.fxml and configure controller
+            try {
+                URL fxmlUrl = getClass().getResource("/com/example/artflow/CustomerDashboard.fxml");
+                if (fxmlUrl == null) {
+                    String msg = "CustomerDashboard.fxml resource not found on classpath.";
+                    LOGGER.severe(msg);
+                    showAlert(Alert.AlertType.ERROR, "Error", msg);
+                    return;
                 }
-            } else {
-                showAlert(Alert.AlertType.ERROR, "Error", "Invalid credentials.");
+
+                FXMLLoader loader = new FXMLLoader(fxmlUrl);
+                Scene scene = new Scene(loader.load(), 600, 400);
+                Object ctrl = loader.getController();
+                if (!(ctrl instanceof CustomerDashboardController)) {
+                    String msg = "Loaded FXML controller is not CustomerDashboardController (got: " + (ctrl == null ? "null" : ctrl.getClass().getName()) + ")";
+                    LOGGER.severe(msg);
+                    showAlert(Alert.AlertType.ERROR, "Error", msg);
+                    return;
+                }
+
+                CustomerDashboardController controller = (CustomerDashboardController) ctrl;
+                controller.setProfileName(fullName);
+                String firstName = fullName.split(" ")[0];
+                controller.setWelcomeFirstName(firstName);
+                controller.setCurrentUserType("customer");
+                // record current user globally for other controllers (e.g., AddArtworkController)
+                CurrentUser.setFullName(fullName);
+                CurrentUser.setUserType("customer");
+
+                Stage stage = (Stage) login2.getScene().getWindow();
+                double width = stage.getWidth();
+                double height = stage.getHeight();
+                stage.setScene(scene);
+                stage.setHeight(height);
+                stage.setWidth(width);
+            } catch (IOException ex) {
+                LOGGER.log(Level.SEVERE, "Unable to open Customer Dashboard", ex);
+                showAlert(Alert.AlertType.ERROR, "Error", "Unable to open dashboard: " + ex.getMessage());
             }
         }
 

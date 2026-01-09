@@ -34,6 +34,8 @@ public class DatabaseHelper {
 
             createTablesIfMissing();
             ensureSchemaUpToDate();
+            // Development helper: ensure at least one user exists for testing
+            //ensureDefaultUserIfEmpty();
 
         } catch (Exception e) {
             System.err.println("Error initializing database:");
@@ -49,6 +51,30 @@ public class DatabaseHelper {
         return instance;
     }
 
+    /**
+     * Debug helper: print DB path and list existing tables.
+     */
+    public void debugPrintTables() {
+        System.out.println("Database URL: " + dbUrl);
+        try (Statement stmt = connection.createStatement(); ResultSet rs = stmt.executeQuery("SELECT name FROM sqlite_master WHERE type='table' ORDER BY name")) {
+            System.out.println("Existing tables:");
+            while (rs.next()) {
+                System.out.println(" - " + rs.getString("name"));
+            }
+        } catch (SQLException e) {
+            System.err.println("Failed to list tables: " + e.getMessage());
+            e.printStackTrace();
+        }
+    }
+
+    /** Return the filesystem path of the SQLite database file (without jdbc:sqlite: prefix) */
+    public String getDbFilePath() {
+        if (dbUrl == null) return null;
+        String p = dbUrl;
+        if (p.startsWith("jdbc:sqlite:")) p = p.substring("jdbc:sqlite:".length());
+        return p;
+    }
+
     private void createTablesIfMissing() {
         String sql = "CREATE TABLE IF NOT EXISTS users (" +
                 "id INTEGER PRIMARY KEY AUTOINCREMENT," +
@@ -62,6 +88,66 @@ public class DatabaseHelper {
         try (Statement stmt = connection.createStatement()) {
             stmt.execute(sql);
             System.out.println("Ensured users table exists (non-destructive).");
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+
+        // create artworks table for persisting artworks
+        String artSql = "CREATE TABLE IF NOT EXISTS artworks (" +
+                "id TEXT PRIMARY KEY, " +
+                "title TEXT, " +
+                "price TEXT, " +
+                "category TEXT, " +
+                "image_path TEXT, " +
+                "artist_name TEXT, " +
+                "description TEXT" +
+                ")";
+        try (Statement stmt = connection.createStatement()) {
+            stmt.execute(artSql);
+            System.out.println("Ensured artworks table exists.");
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        // ensure artist_name column exists for older DBs
+        try (Statement stmt = connection.createStatement()) {
+            ResultSet rs = stmt.executeQuery("PRAGMA table_info(artworks)");
+            boolean hasArtist = false;
+            while (rs.next()) {
+                String name = rs.getString("name");
+                if ("artist_name".equalsIgnoreCase(name)) { hasArtist = true; break; }
+            }
+            if (!hasArtist) {
+                try {
+                    stmt.execute("ALTER TABLE artworks ADD COLUMN artist_name TEXT");
+                    System.out.println("Added missing column: artist_name");
+                } catch (SQLException ex) { }
+            }
+            // ensure description column exists
+            boolean hasDesc = false;
+            rs = stmt.executeQuery("PRAGMA table_info(artworks)");
+            while (rs.next()) {
+                String name = rs.getString("name");
+                if ("description".equalsIgnoreCase(name)) { hasDesc = true; break; }
+            }
+            if (!hasDesc) {
+                try { stmt.execute("ALTER TABLE artworks ADD COLUMN description TEXT"); System.out.println("Added missing column: description"); } catch (SQLException ex) { }
+            }
+        } catch (SQLException ignored) {}
+        // create orders table
+        String ordersSql = "CREATE TABLE IF NOT EXISTS orders (" +
+                "id TEXT PRIMARY KEY, " +
+                "customer_name TEXT, " +
+                "artist_name TEXT, " +
+                "art_title TEXT, " +
+                "quantity INTEGER, " +
+                "amount REAL, " +
+                "ordered_on TEXT, " +
+                "status TEXT" +
+                ")";
+        try (Statement stmt = connection.createStatement()) {
+            stmt.execute(ordersSql);
+            System.out.println("Ensured orders table exists.");
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -198,6 +284,50 @@ public class DatabaseHelper {
         }
     }
 
+    public String getUserDebugInfo(String email) {
+        if (email == null) return "email==null";
+        String normalized = email.trim().toLowerCase();
+        String sql = "SELECT password, user_type FROM users WHERE email = ? COLLATE NOCASE";
+        try (PreparedStatement ps = connection.prepareStatement(sql)) {
+            ps.setString(1, normalized);
+            ResultSet rs = ps.executeQuery();
+            if (!rs.next()) return "NO_USER";
+            String storedPw = rs.getString("password");
+            String ut = rs.getString("user_type");
+            if (ut == null) ut = "";
+            if (!ut.equalsIgnoreCase("artist") && !ut.equalsIgnoreCase("buyer")) return "WRONG_TYPE:" + ut;
+            if (storedPw == null) storedPw = "";
+            return "OK";
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return "ERROR:" + e.getMessage();
+        }
+    }
+
+    /**
+     * Check credentials and return a short status: "OK", "NO_USER", "WRONG_PASSWORD", "WRONG_TYPE".
+     */
+    public String checkCredentials(String email, String password, String expectedUserType) {
+        if (email == null) return "NO_USER";
+        String normalized = email.trim().toLowerCase();
+        String sql = "SELECT password, user_type FROM users WHERE email = ? COLLATE NOCASE";
+        try (PreparedStatement ps = connection.prepareStatement(sql)) {
+            ps.setString(1, normalized);
+            ResultSet rs = ps.executeQuery();
+            if (!rs.next()) return "NO_USER";
+            String storedPw = rs.getString("password");
+            String ut = rs.getString("user_type");
+            if (ut == null) ut = "";
+            if (!ut.equalsIgnoreCase(expectedUserType)) return "WRONG_TYPE:" + ut;
+            if (storedPw == null) storedPw = "";
+            if (!storedPw.equals(password)) return "WRONG_PASSWORD";
+            return "OK";
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return "ERROR:" + e.getMessage();
+        }
+    }
+
     public boolean validateUser(String email, String password, String userType) {
         return loginUser(email, password, userType) != null;
     }
@@ -210,5 +340,125 @@ public class DatabaseHelper {
         } catch (SQLException e) {
             e.printStackTrace();
         }
+    }
+
+    // Artwork persistence helpers
+    public synchronized boolean insertArtwork(ArtworkModel m) {
+        if (m == null) return false;
+        String sql = "INSERT OR REPLACE INTO artworks(id, title, price, category, image_path, artist_name, description) VALUES(?,?,?,?,?,?,?)";
+        try (PreparedStatement ps = connection.prepareStatement(sql)) {
+            ps.setString(1, m.getId());
+            ps.setString(2, m.getTitle());
+            ps.setString(3, m.getPrice());
+            ps.setString(4, m.getCategory());
+            ps.setString(5, m.getImagePath());
+            ps.setString(6, m.getArtistName());
+            ps.setString(7, m.getDescription());
+            ps.executeUpdate();
+            return true;
+        } catch (SQLException e) {
+            System.err.println("Error inserting artwork: " + e.getMessage());
+            return false;
+        }
+    }
+
+    public synchronized boolean updateArtwork(ArtworkModel m) {
+        if (m == null) return false;
+        String sql = "UPDATE artworks SET title = ?, price = ?, category = ?, image_path = ?, artist_name = ?, description = ? WHERE id = ?";
+        try (PreparedStatement ps = connection.prepareStatement(sql)) {
+            ps.setString(1, m.getTitle());
+            ps.setString(2, m.getPrice());
+            ps.setString(3, m.getCategory());
+            ps.setString(4, m.getImagePath());
+            ps.setString(5, m.getArtistName());
+            ps.setString(6, m.getDescription());
+            ps.setString(7, m.getId());
+            int rows = ps.executeUpdate();
+            return rows > 0;
+        } catch (SQLException e) {
+            System.err.println("Error updating artwork: " + e.getMessage());
+            return false;
+        }
+    }
+
+    public synchronized boolean deleteArtwork(String id) {
+        if (id == null) return false;
+        String sql = "DELETE FROM artworks WHERE id = ?";
+        try (PreparedStatement ps = connection.prepareStatement(sql)) {
+            ps.setString(1, id);
+            int rows = ps.executeUpdate();
+            return rows > 0;
+        } catch (SQLException e) {
+            System.err.println("Error deleting artwork: " + e.getMessage());
+            return false;
+        }
+    }
+
+    public synchronized java.util.List<ArtworkModel> listArtworks() {
+        java.util.List<ArtworkModel> out = new java.util.ArrayList<>();
+        String sql = "SELECT id, title, price, category, image_path, artist_name, description FROM artworks";
+        try (Statement stmt = connection.createStatement(); ResultSet rs = stmt.executeQuery(sql)) {
+            while (rs.next()) {
+                String id = rs.getString("id");
+                String title = rs.getString("title");
+                String price = rs.getString("price");
+                String category = rs.getString("category");
+                String imagePath = rs.getString("image_path");
+                String artistName = null;
+                String description = null;
+                try { artistName = rs.getString("artist_name"); } catch (Exception ignored) {}
+                try { description = rs.getString("description"); } catch (Exception ignored) {}
+                out.add(new ArtworkModel(id, title, price, category, imagePath, artistName, description));
+            }
+        } catch (SQLException e) {
+            System.err.println("Error reading artworks from DB: " + e.getMessage());
+        }
+        return out;
+    }
+
+    public synchronized boolean insertOrder(OrderModel o) {
+        if (o == null) return false;
+        String sql = "INSERT INTO orders(id, customer_name, artist_name, art_title, quantity, amount, ordered_on, status) VALUES(?,?,?,?,?,?,?,?)";
+        try (PreparedStatement ps = connection.prepareStatement(sql)) {
+            ps.setString(1, o.getId());
+            ps.setString(2, o.getCustomerName());
+            ps.setString(3, o.getArtistName());
+            ps.setString(4, o.getArtTitle());
+            ps.setInt(5, o.getQuantity());
+            ps.setDouble(6, o.getAmount());
+            ps.setString(7, o.getOrderedOn());
+            ps.setString(8, o.getStatus());
+            ps.executeUpdate();
+            // Debug: print DB path
+            try { System.out.println("Order inserted into DB file: " + getDbFilePath() + " (id=" + o.getId() + ")"); }
+            catch (Exception ignored) {}
+
+
+            return true;
+        } catch (SQLException e) {
+            System.err.println("Error inserting order: " + e.getMessage());
+            return false;
+        }
+    }
+
+    public synchronized java.util.List<OrderModel> listOrders() {
+        java.util.List<OrderModel> out = new java.util.ArrayList<>();
+        String sql = "SELECT id, customer_name, artist_name, art_title, quantity, amount, ordered_on, status FROM orders ORDER BY ordered_on DESC";
+        try (Statement stmt = connection.createStatement(); ResultSet rs = stmt.executeQuery(sql)) {
+            while (rs.next()) {
+                String id = rs.getString("id");
+                String customer = rs.getString("customer_name");
+                String artist = rs.getString("artist_name");
+                String title = rs.getString("art_title");
+                int qty = rs.getInt("quantity");
+                double amount = rs.getDouble("amount");
+                String orderedOn = rs.getString("ordered_on");
+                String status = rs.getString("status");
+                out.add(new OrderModel(id, customer, artist, title, qty, amount, orderedOn, status));
+            }
+        } catch (SQLException e) {
+            System.err.println("Error reading orders from DB: " + e.getMessage());
+        }
+        return out;
     }
 }

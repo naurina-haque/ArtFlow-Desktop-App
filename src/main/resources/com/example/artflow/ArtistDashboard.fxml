@@ -3,6 +3,8 @@
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.BorderPane?>
@@ -26,7 +28,7 @@
                 <VBox prefHeight="384.0" prefWidth="236.0" spacing="6.0" styleClass="menu-list">
                     <children>
                         <Label prefHeight="30.0" prefWidth="142.0" styleClass="menubar" text="Menu Bar" />
-                        <HBox fx:id="dashboardHBox" prefHeight="47.0" prefWidth="228.0" styleClass="menu-hbox">
+                        <HBox fx:id="dashboardHBox" onMouseClicked="#openDashboard" prefHeight="47.0" prefWidth="228.0" styleClass="menu-hbox">
                             <children>
                                 <ImageView fitHeight="17.0" fitWidth="24.0" opacity="0.48" pickOnBounds="true" preserveRatio="true">
                                     <image>
@@ -45,7 +47,7 @@
                         </HBox>
                         <HBox fx:id="artworksHBox" onMouseClicked="#openMyArtworks" prefHeight="47.0" prefWidth="228.0" styleClass="menu-hbox">
                             <children>
-                                <ImageView fitHeight="17.0" fitWidth="24.0" opacity="0.49" pickOnBounds="true" preserveRatio="true">
+                                <ImageView fitHeight="17.0" fitWidth="24.0" onMouseClicked="#openMyArtworks" opacity="0.49" pickOnBounds="true" preserveRatio="true">
                                     <HBox.margin>
                                         <Insets bottom="10.0" left="10.0" top="15.0" />
                                     </HBox.margin>
@@ -53,14 +55,14 @@
                                         <Image url="@img/picture.png" />
                                     </image>
                                 </ImageView>
-                                <Label alignment="CENTER" contentDisplay="CENTER" minHeight="19.0" prefHeight="54.0" prefWidth="201.0" styleClass="menu-item" text="My Artworks" textFill="#ffffff">
+                                <Label alignment="CENTER" contentDisplay="CENTER" minHeight="19.0" onMouseClicked="#openMyArtworks" prefHeight="54.0" prefWidth="201.0" styleClass="menu-item" text="My Artworks" textFill="#ffffff">
                                     <font>
                                         <Font name="System Bold" size="16.0" />
                                     </font>
                                 </Label>
                             </children>
                         </HBox>
-                        <HBox fx:id="ordersHBox" prefHeight="47.0" prefWidth="228.0" styleClass="menu-hbox">
+                        <HBox fx:id="ordersHBox" onMouseClicked="#openOrders" prefHeight="47.0" prefWidth="228.0" styleClass="menu-hbox">
                             <children>
                                 <ImageView fitHeight="23.0" fitWidth="24.0" opacity="0.48" pickOnBounds="true" preserveRatio="true">
                                     <HBox.margin>
@@ -70,31 +72,14 @@
                                         <Image url="@img/order-history.png" />
                                     </image>
                                 </ImageView>
-                                <Label alignment="CENTER" contentDisplay="CENTER" prefHeight="59.0" prefWidth="195.0" styleClass="menu-item" text="My Orders" textFill="#ffffff" wrapText="true">
+                                <Label alignment="CENTER" contentDisplay="CENTER" prefHeight="59.0" prefWidth="195.0" styleClass="menu-item" text="Completed Orders" textFill="#ffffff" wrapText="true">
                                     <font>
                                         <Font name="System Bold" size="16.0" />
                                     </font>
                                 </Label>
                             </children>
                         </HBox>
-                        <HBox fx:id="earningsHBox" prefHeight="54.0" prefWidth="228.0" styleClass="menu-hbox">
-                            <children>
-                                <ImageView fitHeight="23.0" fitWidth="24.0" opacity="0.48" pickOnBounds="true" preserveRatio="true">
-                                    <HBox.margin>
-                                        <Insets bottom="10.0" left="10.0" top="15.0" />
-                                    </HBox.margin>
-                                    <image>
-                                        <Image url="@img/coins.png" />
-                                    </image>
-                                </ImageView>
-                                <Label alignment="CENTER" contentDisplay="CENTER" prefHeight="54.0" prefWidth="218.0" styleClass="menu-item" text="Earnings" textFill="#ffffff" wrapText="true">
-                                    <font>
-                                        <Font name="System Bold" size="16.0" />
-                                    </font>
-                                </Label>
-                            </children>
-                        </HBox>
-                        <HBox fx:id="profileHBox" prefHeight="54.0" prefWidth="228.0" styleClass="menu-hbox">
+                        <HBox fx:id="profileHBox" onMouseClicked="#openProfile" prefHeight="54.0" prefWidth="228.0" styleClass="menu-hbox">
                             <children>
                                 <ImageView fitHeight="23.0" fitWidth="24.0" opacity="0.48" pickOnBounds="true" preserveRatio="true">
                                     <HBox.margin>
@@ -228,69 +213,17 @@
                      </VBox.margin>
                      </HBox>
                        <Label minHeight="-Infinity" prefHeight="34.0" prefWidth="136.0" styleClass="overview" text="Recent Orders" />
-
-                     <VBox fillWidth="true" prefHeight="420.0" prefWidth="670.0" spacing="18" styleClass="recent-orders-card" VBox.vgrow="ALWAYS">
-                         <children>
-                            <!-- Order 1 -->
-                            <HBox alignment="CENTER_LEFT" prefHeight="140.0" prefWidth="620.0" spacing="20" styleClass="order" HBox.hgrow="ALWAYS">
-                                <children>
-                                    <ImageView fitHeight="100.0" fitWidth="80.0" pickOnBounds="true" preserveRatio="true" style="-fx-margin: 0 20 0 10;">
-                                        <image>
-                                            <Image url="@img/WhatsApp Image 2025-12-26 at 1.19.59 AM.jpeg" />
-                                        </image>
-                                    </ImageView>
-                                    <VBox alignment="CENTER_LEFT" spacing="10" VBox.vgrow="ALWAYS">
-                                        <Label style="-fx-font-size: 18px;" styleClass="order-title" text="• Portrait Sketch" />
-                                        <HBox spacing="36">
-                                            <Label style="-fx-font-size: 14px;" styleClass="order-detail" text="Customer: John Doe" />
-                                            <Label style="-fx-font-size: 14px;" styleClass="order-detail" text="Ordered: 25 Dec 2025" />
-                                        </HBox>
-                                    </VBox>
-                                </children>
-                            </HBox>
-
-                            <!-- Order 2 -->
-                            <HBox alignment="CENTER_LEFT" prefHeight="140.0" prefWidth="620.0" spacing="20" styleClass="order" HBox.hgrow="ALWAYS">
-                                <children>
-                                    <ImageView fitHeight="100.0" fitWidth="100.0" pickOnBounds="true" preserveRatio="true" style="-fx-margin: 0 20 0 10;">
-                                        <image>
-                                            <Image url="@img/WhatsApp Image 2025-12-26 at 1.19.59 AM (1).jpeg" />
-                                        </image>
-                                    </ImageView>
-                                    <VBox alignment="CENTER_LEFT" spacing="10" VBox.vgrow="ALWAYS">
-                                        <Label style="-fx-font-size: 18px;" styleClass="order-title" text="• Character Art" />
-                                        <HBox spacing="36">
-                                            <Label style="-fx-font-size: 14px;" styleClass="order-detail" text="Customer: Sarah Smith" />
-                                            <Label style="-fx-font-size: 14px;" styleClass="order-detail" text="Ordered: 24 Dec 2025" />
-                                        </HBox>
-                                    </VBox>
-                                </children>
-                            </HBox>
-
-                            <!-- Order 3 -->
-                            <HBox alignment="CENTER_LEFT" prefHeight="140.0" prefWidth="620.0" spacing="20" styleClass="order" HBox.hgrow="ALWAYS">
-                                <children>
-                                    <ImageView fitHeight="100.0" fitWidth="100.0" pickOnBounds="true" preserveRatio="true" style="-fx-margin: 0 20 0 10;">
-                                        <image>
-                                            <Image url="@img/WhatsApp Image 2025-12-26 at 1.19.59 AM (2).jpeg" />
-                                        </image>
-                                    </ImageView>
-                                    <VBox alignment="CENTER_LEFT" spacing="10" VBox.vgrow="ALWAYS">
-                                        <Label style="-fx-font-size: 18px;" styleClass="order-title" text="• Logo Design" />
-                                        <HBox spacing="36">
-                                            <Label style="-fx-font-size: 14px;" styleClass="order-detail" text="Customer: Mike Johnson" />
-                                            <Label style="-fx-font-size: 14px;" styleClass="order-detail" text="Ordered: 23 Dec 2025" />
-                                        </HBox>
-                                    </VBox>
-                                </children>
-                            </HBox>
-
-                         </children>
-                         <padding>
-                            <Insets />
-                        </padding>
-                     </VBox>
-                     <VBox VBox.vgrow="ALWAYS" />
+               <TableView prefHeight="266.0" prefWidth="670.0">
+                 <columns>
+                   <TableColumn prefWidth="75.0" text="ID" />
+                   <TableColumn prefWidth="105.0" text="Customer Name" />
+                     <TableColumn prefWidth="96.0" text="ArtWork Title" />
+                     <TableColumn prefWidth="89.0" text="No. of ArtWork" />
+                     <TableColumn prefWidth="103.0" text="Ordered on" />
+                     <TableColumn prefWidth="95.0" text="Total Amount" />
+                     <TableColumn prefWidth="94.0" text="Accept/Reject" />
+                 </columns>
+               </TableView>
                   <padding>
                      <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
                   </padding>
