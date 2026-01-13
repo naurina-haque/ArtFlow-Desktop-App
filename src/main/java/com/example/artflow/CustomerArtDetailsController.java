@@ -1,14 +1,22 @@
 package com.example.artflow;
 
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.Alert;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.HBox;
+import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import javafx.scene.control.Spinner;
 import javafx.scene.control.SpinnerValueFactory;
+
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public class CustomerArtDetailsController {
     @FXML private ImageView detailImageView;
@@ -18,11 +26,23 @@ public class CustomerArtDetailsController {
     @FXML private Label detailPrice;
     @FXML private Button buyButton;
     @FXML private Button closeButton;
+    @FXML private Button incrementButton;
+    @FXML private Button decrementButton;
+    @FXML private Label quantityLabel;
     @FXML private Spinner<Integer> quantitySpinner;
     @FXML private Label detailTotal;
     @FXML private Label detailDescription; // Added description label
+    
+    @FXML private VBox sidebar;
+    @FXML private HBox dashboardHBox;
+    @FXML private HBox ordersHBox;
+    @FXML private HBox profileHBox;
+    @FXML private HBox logoutHBox;
+    @FXML private Label profileNameLabel;
 
+    private static final Logger LOGGER = Logger.getLogger(CustomerArtDetailsController.class.getName());
     private ArtworkModel model;
+    private int quantity = 1;
 
     public void setModel(ArtworkModel m) {
         this.model = m;
@@ -43,12 +63,19 @@ public class CustomerArtDetailsController {
             // leave image empty on failure
         }
 
-        // initialize total based on default spinner value
-        updateTotalFromSpinner();
+        // initialize quantity display
+        updateQuantityDisplay();
     }
 
     @FXML
     private void initialize() {
+        // Set profile name from current user
+        try {
+            if (profileNameLabel != null && CurrentUser.getFullName() != null) {
+                profileNameLabel.setText(CurrentUser.getFullName());
+            }
+        } catch (Exception ignored) {}
+        
         // Configure quantity spinner
         try {
             SpinnerValueFactory.IntegerSpinnerValueFactory vf = new SpinnerValueFactory.IntegerSpinnerValueFactory(1, 999, 1);
@@ -66,7 +93,8 @@ public class CustomerArtDetailsController {
         if (buyButton != null) {
             buyButton.setOnAction(e -> {
                 try {
-                    int qty = (quantitySpinner == null || quantitySpinner.getValue() == null) ? 1 : quantitySpinner.getValue();
+                    // Get quantity from the quantity label
+                    int qty = quantity;
                     double unit = 0.0;
                     if (model != null && model.getPrice() != null) {
                         try { unit = Double.parseDouble(model.getPrice().replaceAll("[^0-9.\\-]", "")); } catch (Exception ignored) {}
@@ -77,6 +105,7 @@ public class CustomerArtDetailsController {
                     String artist = model == null ? "" : (model.getArtistName() == null ? "" : model.getArtistName());
                     String title = model == null ? "" : model.getTitle();
 
+                    // Create order with the selected quantity
                     OrderModel order = new OrderModel(customer, artist, title, qty, total, "pending");
                     boolean ok = DatabaseHelper.getInstance().insertOrder(order);
                     if (ok) {
@@ -93,9 +122,9 @@ public class CustomerArtDetailsController {
                         Alert a = new Alert(Alert.AlertType.INFORMATION);
                         a.setTitle("Order placed");
                         a.setHeaderText(null);
-                        a.setContentText("Order placed successfully.\nOrder id: " + order.getId() + "\nDatabase file: " + dbPath + "\nCSV log: " + csvPathStr + "\nOpen the CSV file to inspect the order.");
+                        a.setContentText("Order placed successfully!\nQuantity: " + qty + "\nTotal: $" + String.format("%.2f", total) + "\nOrder ID: " + order.getId() + "\n\nDatabase: " + dbPath);
                         a.showAndWait();
-                        System.out.println("Order created: id=" + order.getId() + ", db=" + dbPath + ", csv=" + csvPathStr);
+                        System.out.println("Order created: id=" + order.getId() + ", quantity=" + qty + ", total=$" + total + ", db=" + dbPath + ", csv=" + csvPathStr);
                       } else {
                          Alert a = new Alert(Alert.AlertType.ERROR);
                          a.setTitle("Order failed");
@@ -131,5 +160,82 @@ public class CustomerArtDetailsController {
         }
         double total = unit * qty;
         detailTotal.setText(String.format("$%.2f", total));
+    }
+    
+    @FXML
+    private void handleIncrement() {
+        if (quantity < 999) {
+            quantity++;
+            updateQuantityDisplay();
+        }
+    }
+    
+    @FXML
+    private void handleDecrement() {
+        if (quantity > 1) {
+            quantity--;
+            updateQuantityDisplay();
+        }
+    }
+    
+    private void updateQuantityDisplay() {
+        if (quantityLabel != null) {
+            quantityLabel.setText(String.valueOf(quantity));
+        }
+        // Update price display if exists
+        if (model != null && model.getPrice() != null) {
+            try {
+                double unit = Double.parseDouble(model.getPrice().replaceAll("[^0-9.\\-]", ""));
+                double total = unit * quantity;
+                // You can add a total label if needed
+            } catch (Exception ignored) {}
+        }
+    }
+
+    @FXML
+    private void openDashboard(MouseEvent e) {
+        navigateTo("/com/example/artflow/CustomerDashboard.fxml", e);
+    }
+
+    @FXML
+    private void openOrders(MouseEvent e) {
+        navigateTo("/com/example/artflow/CustomerTrackOrder.fxml", e);
+    }
+
+    @FXML
+    private void openProfile(MouseEvent e) {
+        navigateTo("/com/example/artflow/CustomerProfile.fxml", e);
+    }
+
+    @FXML
+    private void handleLogout(MouseEvent e) {
+        try {
+            CurrentUser.setFullName(null);
+            CurrentUser.setUserType(null);
+            navigateTo("/com/example/artflow/CustomerLogin.fxml", e);
+        } catch (Exception ex) {
+            LOGGER.log(Level.SEVERE, "Logout failed", ex);
+        }
+    }
+
+    private void navigateTo(String fxmlPath, MouseEvent e) {
+        try {
+            javafx.scene.Node src = (javafx.scene.Node) e.getSource();
+            Stage currentStage = (Stage) src.getScene().getWindow();
+            
+            // Check if this is a modal dialog (has an owner)
+            Stage targetStage = currentStage;
+            if (currentStage.getOwner() != null && currentStage.getOwner() instanceof Stage) {
+                // This is a modal dialog, close it and navigate the owner window
+                targetStage = (Stage) currentStage.getOwner();
+                currentStage.close();
+            }
+            
+            FXMLLoader loader = new FXMLLoader(getClass().getResource(fxmlPath));
+            Scene scene = new Scene(loader.load(), targetStage.getWidth(), targetStage.getHeight());
+            targetStage.setScene(scene);
+        } catch (Exception ex) {
+            LOGGER.log(Level.SEVERE, "Navigation failed to " + fxmlPath, ex);
+        }
     }
 }

@@ -16,8 +16,6 @@ import java.io.IOException;
 public class ArtistLoginController {
     @FXML
     private Button back;
-    @FXML
-    private ImageView imageview;
 
     @FXML
     private Label signup;
@@ -36,13 +34,6 @@ public class ArtistLoginController {
     public void initialize()
     {
         dbHelper = DatabaseHelper.getInstance();
-
-        imageview.sceneProperty().addListener((obs, oldScene, newScene) -> {
-            if (newScene != null) {
-                imageview.fitWidthProperty().bind(newScene.widthProperty());
-                imageview.fitHeightProperty().bind(newScene.heightProperty());
-            }
-        });
 
         signup.setOnMouseClicked(e->{
             try {
@@ -148,6 +139,7 @@ public class ArtistLoginController {
                     // set global current user
                     CurrentUser.setFullName(fullName);
                     CurrentUser.setUserType("artist");
+                    CurrentUser.setEmail(email); // Set the email in CurrentUser
 
                     double width = stage.getWidth();
                     double height = stage.getHeight();

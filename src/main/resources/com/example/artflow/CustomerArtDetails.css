@@ -1,0 +1,84 @@
+/* Root VBox */
+.root {
+    -fx-background-color: #f3e8ff; /* Light violet background */
+    -fx-padding: 12;
+}
+
+/* ImageView */
+#detailImageView {
+    -fx-effect: dropshadow(gaussian, rgba(124,77,255,0.4), 15, 0.5, 0, 0);
+    -fx-border-color: #7c4dff;
+    -fx-border-width: 2px;
+    -fx-border-radius: 10px;
+    -fx-background-radius: 10px;
+}
+
+/* Title Label */
+.title-label {
+    -fx-text-fill: #4a148c; /* Dark violet */
+    -fx-font-weight: bold;
+    -fx-font-size: 20px;
+}
+
+/* Artist Label */
+.artist-label {
+    -fx-text-fill: #7c4dff;
+    -fx-font-style: italic;
+}
+
+/* Category Label */
+.category-label {
+    -fx-text-fill: #311b92;
+    -fx-font-weight: semi-bold;
+}
+
+/* Price Label */
+.price-label {
+    -fx-text-fill: #b39ddb;
+    -fx-font-weight: bold;
+}
+
+/* Buttons */
+.btn-buy {
+    -fx-background-color: #7c4dff;
+    -fx-text-fill: white;
+    -fx-font-weight: bold;
+    -fx-background-radius: 8px;
+    -fx-cursor: hand;
+}
+
+.btn-buy:hover {
+    -fx-background-color: #4a148c;
+}
+
+/* Close Button */
+#closeButton {
+    -fx-background-color: #e1bee7;
+    -fx-text-fill: #4a148c;
+    -fx-background-radius: 8px;
+    -fx-font-weight: bold;
+    -fx-cursor: hand;
+}
+
+#closeButton:hover {
+    -fx-background-color: #d1c4e9;
+}
+
+/* +/- Buttons for quantity */
+HBox > Button {
+    -fx-background-color: #b39ddb;
+    -fx-text-fill: white;
+    -fx-font-weight: bold;
+    -fx-background-radius: 5px;
+}
+
+HBox > Button:hover {
+    -fx-background-color: #7c4dff;
+}
+
+/* Quantity label in HBox */
+HBox > Label {
+    -fx-text-fill: #4a148c;
+    -fx-font-weight: bold;
+    -fx-alignment: center;
+}

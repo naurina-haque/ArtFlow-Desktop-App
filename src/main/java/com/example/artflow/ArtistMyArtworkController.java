@@ -78,6 +78,9 @@ public class ArtistMyArtworkController {
     @FXML
     private HBox logoutHBox;
 
+    @FXML
+    private VBox sidebar; // injected fx:id from fx:include
+
     private static final Logger LOGGER = Logger.getLogger(ArtistMyArtworkController.class.getName());
 
     @FXML
@@ -477,17 +480,15 @@ public class ArtistMyArtworkController {
 
     @FXML
     private void openDashboard(MouseEvent event) {
+        System.out.println("openDashboard called, source=" + (event == null ? "null" : event.getSource()) );
         setSidebarSelected(dashboardHBox);
         // load ArtistDashboard.fxml into current stage and tell it to highlight dashboard
         try {
-            Stage stage = null;
-            if (event != null && event.getSource() instanceof javafx.scene.Node) {
-                stage = (Stage) ((javafx.scene.Node) event.getSource()).getScene().getWindow();
-            } else if (addArtworkBtn != null && addArtworkBtn.getScene() != null) {
-                stage = (Stage) addArtworkBtn.getScene().getWindow();
-            }
+            Stage stage = findStageFromEventOrUi(event);
+            System.out.println("openDashboard: resolved stage=" + stage);
             if (stage == null) return;
             URL res = getClass().getResource("/com/example/artflow/ArtistDashboard.fxml");
+            System.out.println("openDashboard: loading resource=" + res);
             if (res == null) return;
             FXMLLoader loader = new FXMLLoader(res);
             Scene s = new Scene(loader.load(), stage.getWidth(), stage.getHeight());
@@ -511,9 +512,26 @@ public class ArtistMyArtworkController {
 
     @FXML
     private void openOrders(MouseEvent event) {
+        System.out.println("openOrders called, source=" + (event == null ? "null" : event.getSource()) );
         setSidebarSelected(ordersHBox);
-        // stub: implement navigation to orders page if exists
-        System.out.println("Open Orders (not implemented).");
+        try {
+            Stage stage = findStageFromEventOrUi(event);
+            System.out.println("openOrders: resolved stage=" + stage);
+            if (stage == null) return;
+            URL res = getClass().getResource("/com/example/artflow/ArtistCompletedOrders.fxml");
+            System.out.println("openOrders: loading resource=" + res);
+            if (res == null) {
+                System.err.println("ArtistCompletedOrders.fxml not found");
+                return;
+            }
+            FXMLLoader loader = new FXMLLoader(res);
+            Scene s = new Scene(loader.load(), stage.getWidth(), stage.getHeight());
+            ArtistCompletedOrdersController ctrl = loader.getController();
+            if (ctrl != null) ctrl.getClass(); // ensure initialized
+            stage.setScene(s);
+        } catch (Exception ex) {
+            LOGGER.log(Level.SEVERE, "Failed to open Completed Orders", ex);
+        }
     }
 
     @FXML
@@ -566,4 +584,46 @@ public class ArtistMyArtworkController {
             default: setSidebarSelected(null); break;
         }
     }
- }
+
+    // Try several ways to find the current Stage/window for navigation
+    private Stage findStageFromEventOrUi(MouseEvent event) {
+        try {
+            if (event != null && event.getSource() instanceof javafx.scene.Node) {
+                javafx.scene.Node n = (javafx.scene.Node) event.getSource();
+                if (n.getScene() != null && n.getScene().getWindow() instanceof Stage) return (Stage) n.getScene().getWindow();
+            }
+        } catch (Exception ignored) {}
+
+        try {
+            if (addArtworkBtn != null && addArtworkBtn.getScene() != null && addArtworkBtn.getScene().getWindow() instanceof Stage) return (Stage) addArtworkBtn.getScene().getWindow();
+        } catch (Exception ignored) {}
+
+        try {
+            if (contentVBox != null && contentVBox.getScene() != null && contentVBox.getScene().getWindow() instanceof Stage) return (Stage) contentVBox.getScene().getWindow();
+        } catch (Exception ignored) {}
+
+        try {
+            if (searchField != null && searchField.getScene() != null && searchField.getScene().getWindow() instanceof Stage) return (Stage) searchField.getScene().getWindow();
+        } catch (Exception ignored) {}
+
+        // last resort: try to find any window that is showing
+        try {
+            for (javafx.stage.Window w : javafx.stage.Window.getWindows()) {
+                if (w instanceof Stage st && st.isShowing()) return st;
+            }
+        } catch (Exception ignored) {}
+
+        return null;
+    }
+
+    // Recursively wire click handlers to an HBox and all its children
+    private void wireClickable(HBox hbox, javafx.event.EventHandler<MouseEvent> handler) {
+        if (hbox == null) return;
+        hbox.setOnMouseClicked(handler);
+        for (javafx.scene.Node child : hbox.getChildren()) {
+            if (child instanceof HBox) {
+                wireClickable((HBox) child, handler); // recurse into child HBox
+            }
+        }
+    }
+}

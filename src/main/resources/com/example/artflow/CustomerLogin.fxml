@@ -5,8 +5,6 @@
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.PasswordField?>
 <?import javafx.scene.control.TextField?>
-<?import javafx.scene.image.Image?>
-<?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.StackPane?>
@@ -16,18 +14,13 @@
 <?import javafx.scene.paint.Stop?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane prefHeight="400.0" prefWidth="600.0" style=" -fx-background-size: cover; -fx-background-repeat: no-repeat;" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.artflow.CustomerLoginController">
+<AnchorPane prefHeight="400.0" prefWidth="600.0" styleClass="green-gradient" stylesheets="@Auth.css" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.artflow.CustomerLoginController">
     <children>
-        <ImageView fx:id="imageview2" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
-            <image>
-                <Image url="@img/background3.png" />
-            </image>
-        </ImageView>
-        <StackPane layoutX="138.0" layoutY="20.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+        <StackPane layoutX="-6.666666666666667" layoutY="20.0" prefWidth="607.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
             <children>
-                <VBox alignment="CENTER" maxHeight="389.0" maxWidth="335.0" prefHeight="358.0" prefWidth="317.0" spacing="10.0" style="-fx-background-radius: 30; -fx-border-radius: 30; -fx-background-color: rgba(217,129,250,0.38); -fx-border-color: #ffffff;">
+                <VBox alignment="CENTER" maxHeight="389.0" maxWidth="335.0" prefHeight="358.0" prefWidth="317.0" spacing="10.0" style="-fx-background-radius: 30; -fx-border-radius: 30; -fx-background-color: rgba(177,229,221,0.45); -fx-border-color: #ffffff;">
                     <children>
-                        <Label alignment="CENTER" contentDisplay="CENTER" text="Customer Login" textFill="#411682">
+                        <Label alignment="CENTER" contentDisplay="CENTER" text="Customer Login" textFill="#00695c">
                             <font>
                                 <Font name="System Bold" size="27.0" />
                             </font>
@@ -54,12 +47,12 @@
                         </PasswordField>
                         <HBox alignment="CENTER" prefHeight="70.0" prefWidth="313.0" spacing="10.0">
                             <children>
-                                <Button fx:id="back2" mnemonicParsing="false" prefHeight="9.0" prefWidth="152.0" style="-fx-background-color: #411682; -fx-background-radius: 30;" text="Back" textFill="WHITE">
+                                <Button fx:id="back2" mnemonicParsing="false" prefHeight="9.0" prefWidth="152.0" styleClass="green-button" text="Back" textFill="WHITE">
                                     <font>
                                         <Font name="System Bold" size="18.0" />
                                     </font>
                                 </Button>
-                                <Button fx:id="login2" mnemonicParsing="false" prefHeight="17.0" prefWidth="151.0" style="-fx-background-color: #411682; -fx-background-radius: 30;" text="Login">
+                                <Button fx:id="login2" mnemonicParsing="false" prefHeight="17.0" prefWidth="151.0" styleClass="green-button" text="Login">
                                     <font>
                                         <Font name="System Bold" size="18.0" />
                                     </font>
@@ -89,7 +82,7 @@
                                         <Font size="14.0" />
                                     </font>
                                 </Label>
-                                <Label fx:id="signup2" style="-fx-underline: true; -fx-cursor: hand;" text="Sign Up" textFill="#079efc">
+                                <Label fx:id="signup2" style="-fx-underline: true; -fx-cursor: hand;" text="Sign Up" textFill="#0a07fa">
                                     <font>
                                         <Font size="14.0" />
                                     </font>

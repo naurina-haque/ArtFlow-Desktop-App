@@ -16,131 +16,8 @@
 
 <BorderPane minHeight="-Infinity" prefHeight="661.0" prefWidth="978.0" styleClass="artist-root" stylesheets="@ArtistMyArtwork.css" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.artflow.ArtistMyArtworkController">
 <left>
-    <VBox prefHeight="561.0" prefWidth="260.0" styleClass="sidebar" BorderPane.alignment="CENTER">
-        <BorderPane.margin>
-            <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
-        </BorderPane.margin>
-        <children>
-            <Label minHeight="-Infinity" prefHeight="43.0" prefWidth="200.0" styleClass="app-title" text="ART FLOW">
-                <font>
-                    <Font name="Bell MT Bold" size="24.0" />
-                </font>
-            </Label>
-            <VBox prefHeight="384.0" prefWidth="236.0" spacing="6.0" styleClass="menu-list">
-                <children>
-                    <Label prefHeight="30.0" prefWidth="142.0" styleClass="menubar" text="Menu Bar" />
-                    <HBox prefHeight="47.0" prefWidth="228.0" styleClass="menu-hbox">
-                        <children>
-                            <ImageView fitHeight="17.0" fitWidth="24.0" opacity="0.48" pickOnBounds="true" preserveRatio="true">
-                                <image>
-                                    <Image url="@img/apps.png" />
-                                </image>
-                                <HBox.margin>
-                                    <Insets bottom="10.0" left="10.0" top="15.0" />
-                                </HBox.margin>
-                            </ImageView>
-                            <Label alignment="CENTER" contentDisplay="CENTER" minHeight="19.0" prefHeight="54.0" prefWidth="201.0" styleClass="menu-item" text="Dashboard" textFill="#ffffff">
-                                <font>
-                                    <Font name="System Bold" size="16.0" />
-                                </font>
-                            </Label>
-                        </children>
-                    </HBox>
-                    <HBox prefHeight="47.0" prefWidth="228.0" styleClass="menu-hbox">
-                        <children>
-                            <ImageView fitHeight="17.0" fitWidth="24.0" opacity="0.49" pickOnBounds="true" preserveRatio="true">
-                                <HBox.margin>
-                                    <Insets bottom="10.0" left="10.0" top="15.0" />
-                                </HBox.margin>
-                                <image>
-                                    <Image url="@img/picture.png" />
-                                </image>
-                            </ImageView>
-                            <Label alignment="CENTER" contentDisplay="CENTER" minHeight="19.0" prefHeight="54.0" prefWidth="201.0" styleClass="menu-item" text="My Artworks" textFill="#ffffff">
-                                <font>
-                                    <Font name="System Bold" size="16.0" />
-                                </font>
-                            </Label>
-                        </children>
-                    </HBox>
-                    <HBox prefHeight="47.0" prefWidth="228.0" styleClass="menu-hbox">
-                        <children>
-                            <ImageView fitHeight="23.0" fitWidth="24.0" opacity="0.48" pickOnBounds="true" preserveRatio="true">
-                                <HBox.margin>
-                                    <Insets bottom="10.0" left="10.0" top="15.0" />
-                                </HBox.margin>
-                                <image>
-                                    <Image url="@img/order-history.png" />
-                                </image>
-                            </ImageView>
-                            <Label alignment="CENTER" contentDisplay="CENTER" prefHeight="59.0" prefWidth="195.0" styleClass="menu-item" text="My Orders" textFill="#ffffff" wrapText="true">
-                                <font>
-                                    <Font name="System Bold" size="16.0" />
-                                </font>
-                            </Label>
-                        </children>
-                    </HBox>
-                    <HBox prefHeight="54.0" prefWidth="228.0" styleClass="menu-hbox">
-                        <children>
-                            <ImageView fitHeight="23.0" fitWidth="24.0" opacity="0.48" pickOnBounds="true" preserveRatio="true">
-                                <HBox.margin>
-                                    <Insets bottom="10.0" left="10.0" top="15.0" />
-                                </HBox.margin>
-                                <image>
-                                    <Image url="@img/coins.png" />
-                                </image>
-                            </ImageView>
-                            <Label alignment="CENTER" contentDisplay="CENTER" prefHeight="54.0" prefWidth="218.0" styleClass="menu-item" text="Earnings" textFill="#ffffff" wrapText="true">
-                                <font>
-                                    <Font name="System Bold" size="16.0" />
-                                </font>
-                            </Label>
-                        </children>
-                    </HBox>
-                    <HBox prefHeight="54.0" prefWidth="228.0" styleClass="menu-hbox">
-                        <children>
-                            <ImageView fitHeight="23.0" fitWidth="24.0" opacity="0.48" pickOnBounds="true" preserveRatio="true">
-                                <HBox.margin>
-                                    <Insets bottom="10.0" left="10.0" top="15.0" />
-                                </HBox.margin>
-                                <image>
-                                    <Image url="@img/user.png" />
-                                </image>
-                            </ImageView>
-                            <Label alignment="CENTER" contentDisplay="CENTER" prefHeight="58.0" prefWidth="195.0" styleClass="menu-item" text="Profile" textFill="#ffffff" wrapText="true">
-                                <font>
-                                    <Font name="System Bold" size="16.0" />
-                                </font>
-                            </Label>
-                        </children>
-                    </HBox>
-                    <HBox prefHeight="54.0" prefWidth="228.0" styleClass="menu-hbox">
-                        <children>
-                            <ImageView fitHeight="23.0" fitWidth="24.0" opacity="0.48" pickOnBounds="true" preserveRatio="true">
-                                <HBox.margin>
-                                    <Insets bottom="10.0" left="10.0" top="15.0" />
-                                </HBox.margin>
-                                <image>
-                                    <Image url="@img/leave.png" />
-                                </image>
-                            </ImageView>
-                            <Label alignment="CENTER" contentDisplay="CENTER" prefHeight="75.0" prefWidth="195.0" styleClass="menu-item" text="Logout" textFill="#ffffff" wrapText="true">
-                                <font>
-                                    <Font name="System Bold" size="16.0" />
-                                </font>
-                            </Label>
-                        </children>
-                    </HBox>
-                </children>
-                <padding>
-                    <Insets left="12.0" right="12.0" top="20.0" />
-                </padding>
-            </VBox>
-        </children>
-        <padding>
-            <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
-        </padding>
-    </VBox>
+    <!-- include shared sidebar (give fx:id so parent controller can inject it) -->
+    <fx:include fx:id="sidebar" source="ArtistSidebar.fxml" />
 </left>
 
 
@@ -156,7 +33,7 @@
               <HBox alignment="TOP_RIGHT" prefHeight="35.0">
                   <HBox alignment="TOP_RIGHT" prefHeight="23.0" prefWidth="189.0" styleClass="profile-box">
                       <children>
-                          <Label alignment="CENTER" prefHeight="35.0" prefWidth="138.0" styleClass="profile-name" text="Artist Name" wrapText="true">
+                          <Label alignment="CENTER" prefHeight="35.0" prefWidth="138.0" styleClass="profile-name" text="Naurina Turin" wrapText="true">
                               <font>
                                   <Font name="System Bold" size="14.0" />
                               </font>

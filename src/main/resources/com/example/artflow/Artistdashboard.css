@@ -212,3 +212,81 @@
 .artist-root {
     -fx-background-color: linear-gradient(to bottom right, #eee8fa 0%, #e4dff6 40%, #f6f1ff 100%);
 }
+
+/* Buttons in the orders actions column */
+.accept-btn {
+    -fx-background-color: linear-gradient(from 0% 0% to 100% 100%, #6fbf73, #3aa75a);
+    -fx-text-fill: white;
+    -fx-font-weight: bold;
+    -fx-background-radius: 6px;
+    -fx-padding: 6 10 6 10;
+}
+.accept-btn:hover {
+    -fx-opacity: 0.95;
+    -fx-cursor: hand;
+}
+.reject-btn {
+    -fx-background-color: linear-gradient(from 0% 0% to 100% 100%, #e06464, #c93b3b);
+    -fx-text-fill: white;
+    -fx-font-weight: bold;
+    -fx-background-radius: 6px;
+    -fx-padding: 6 10 6 10;
+}
+.reject-btn:hover {
+    -fx-opacity: 0.95;
+    -fx-cursor: hand;
+}
+
+.table {
+    -fx-background-color: #ffffff;
+    -fx-border-color: #d6e0ff;
+    -fx-border-radius: 8;
+    -fx-background-radius: 8;
+    -fx-padding: 4;
+    -fx-table-cell-border-color: transparent;
+}
+
+.table .column-header-background {
+    -fx-background-color: linear-gradient(from 0% 0% to 100% 100%, rgba(56, 24, 120, 0.98), rgba(150, 80, 230, 0.98));    -fx-background-radius: 8 8 0 0;
+    -fx-padding: 6 0;
+}
+.table .column-header,
+.table .filler {
+    -fx-size: 32;
+    -fx-border-color: transparent;
+    -fx-background-color: transparent;
+}
+
+.table .column-header .label {
+    -fx-text-fill: #ffffff;
+    -fx-font-weight: bolder;
+    -fx-font-size: 13px;
+}
+
+.table .table-row-cell {
+    -fx-background-color: #ffffff;
+    -fx-border-color: transparent;
+}
+
+.table .table-row-cell:odd {
+    -fx-background-color: #f5f8ff;
+}
+
+.table .table-row-cell:hover {
+    -fx-background-color: #e9f1ff;
+}
+
+.table .table-row-cell:selected {
+    -fx-background-color: #d6e9ff;
+    -fx-text-fill: #162b4f;
+}
+
+.table .virtual-flow .scroll-bar:vertical,
+.table .virtual-flow .scroll-bar:horizontal {
+    -fx-background-color: transparent;
+}
+
+.table .virtual-flow .scroll-bar .thumb {
+    -fx-background-color: #b5c9f5;
+    -fx-background-radius: 8;
+}

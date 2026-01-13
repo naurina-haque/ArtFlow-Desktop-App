@@ -5,8 +5,6 @@
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.PasswordField?>
 <?import javafx.scene.control.TextField?>
-<?import javafx.scene.image.Image?>
-<?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.StackPane?>
@@ -16,18 +14,13 @@
 <?import javafx.scene.paint.Stop?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane prefHeight="400.0" prefWidth="600.0" style=" -fx-background-size: cover; -fx-background-repeat: no-repeat;" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.artflow.CustomerSignupController">
+<AnchorPane prefHeight="400.0" prefWidth="600.0" styleClass="green-gradient" stylesheets="@Auth.css" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.artflow.CustomerSignupController">
     <children>
-        <ImageView fx:id="imageview4" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
-            <image>
-                <Image url="@img/background3.png" />
-            </image>
-        </ImageView>
         <StackPane AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
             <children>
-                <VBox alignment="CENTER" maxHeight="579.0" maxWidth="367.0" prefHeight="535.0" prefWidth="367.0" spacing="10.0" style="-fx-background-radius: 30; -fx-border-radius: 30; -fx-background-color: rgba(217,129,250,0.38); -fx-border-color: #ffffff;">
+                <VBox alignment="CENTER" maxHeight="579.0" maxWidth="367.0" prefHeight="535.0" prefWidth="367.0" spacing="10.0" style="-fx-background-radius: 30; -fx-border-radius: 30; -fx-background-color: rgba(177,229,221,0.45); -fx-border-color: #ffffff;">
                     <children>
-                        <Label alignment="CENTER" contentDisplay="CENTER" text="Create Account As Customer" textFill="#411682">
+                        <Label alignment="CENTER" contentDisplay="CENTER" text="Create Account As Customer" textFill="#00695c">
                             <font>
                                 <Font name="System Bold" size="25.0" />
                             </font>
@@ -84,12 +77,12 @@
                   </PasswordField>
                         <HBox alignment="CENTER" prefHeight="70.0" prefWidth="313.0" spacing="10.0">
                             <children>
-                                <Button fx:id="back4" mnemonicParsing="false" prefHeight="9.0" prefWidth="152.0" style="-fx-background-color: #411682; -fx-background-radius: 30;" text="Back" textFill="WHITE">
+                                <Button fx:id="back4" mnemonicParsing="false" prefHeight="9.0" prefWidth="152.0" styleClass="green-button" text="Back" textFill="WHITE">
                                     <font>
                                         <Font name="System Bold" size="18.0" />
                                     </font>
                                 </Button>
-                                <Button fx:id="signup4" mnemonicParsing="false" prefHeight="17.0" prefWidth="151.0" style="-fx-background-color: #411682; -fx-background-radius: 30;" text="SignUp">
+                                <Button fx:id="signup4" mnemonicParsing="false" prefHeight="17.0" prefWidth="151.0" styleClass="green-button" text="SignUp">
                                     <font>
                                         <Font name="System Bold" size="18.0" />
                                     </font>
@@ -119,7 +112,7 @@
                                         <Font size="14.0" />
                                     </font>
                                 </Label>
-                                <Label fx:id="login4" style="-fx-underline: true; -fx-cursor: hand;" text="Login" textFill="#079efc">
+                                <Label fx:id="login4" style="-fx-underline: true; -fx-cursor: hand;" text="Login" textFill="#0a07fa">
                                     <font>
                                         <Font size="14.0" />
                                     </font>

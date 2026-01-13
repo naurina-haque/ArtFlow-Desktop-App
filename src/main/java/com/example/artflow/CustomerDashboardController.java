@@ -47,29 +47,19 @@ public class CustomerDashboardController {
     @FXML
     private void openDashboard(MouseEvent event) {
         setSidebarSelected(dashboardHBox);
-        // TODO: load dashboard content if separate
+        // Already on dashboard
     }
 
     @FXML
     private void openMyArtworks(MouseEvent event) {
         setSidebarSelected(artworksHBox);
-        // TODO: navigate to MyArtworks view
+        // TODO: navigate to MyArtworks view if created
     }
 
     @FXML
     private void openOrders(MouseEvent event) {
         setSidebarSelected(ordersHBox);
-        try {
-            var fxml = getClass().getResource("/com/example/artflow/OrdersList.fxml");
-            if (fxml == null) return;
-            javafx.fxml.FXMLLoader l = new javafx.fxml.FXMLLoader(fxml);
-            javafx.scene.Parent root = l.load();
-            Stage stage = new Stage();
-            stage.setTitle("Orders");
-            stage.initOwner(ordersHBox.getScene() == null ? null : ordersHBox.getScene().getWindow());
-            stage.setScene(new javafx.scene.Scene(root));
-            stage.show();
-        } catch (Exception ex) { ex.printStackTrace(); }
+        navigateTo("/com/example/artflow/CustomerTrackOrder.fxml");
     }
 
     @FXML
@@ -80,6 +70,7 @@ public class CustomerDashboardController {
     @FXML
     private void openProfile(MouseEvent event) {
         setSidebarSelected(profileHBox);
+        navigateTo("/com/example/artflow/CustomerProfile.fxml");
     }
 
     @FXML
@@ -91,19 +82,24 @@ public class CustomerDashboardController {
             CurrentUser.setFullName(null);
             CurrentUser.setUserType(null);
 
-            Stage stage = (Stage) (logoutHBox == null ? null : logoutHBox.getScene().getWindow());
+            navigateTo("/com/example/artflow/CustomerLogin.fxml");
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+    }
+
+    private void navigateTo(String fxmlPath) {
+        try {
+            Stage stage = (Stage) (dashboardHBox == null ? null : dashboardHBox.getScene().getWindow());
             if (stage == null) {
-                System.err.println("CustomerDashboardController: unable to get stage for logout");
+                System.err.println("CustomerDashboardController: unable to get stage for navigation");
                 return;
             }
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/example/artflow/CustomerLogin.fxml"));
-            Scene scene = new Scene(loader.load(), 600, 400);
-            double w = stage.getWidth();
-            double h = stage.getHeight();
+            FXMLLoader loader = new FXMLLoader(getClass().getResource(fxmlPath));
+            Scene scene = new Scene(loader.load(), stage.getWidth(), stage.getHeight());
             stage.setScene(scene);
-            stage.setWidth(w);
-            stage.setHeight(h);
         } catch (Exception ex) {
+            System.err.println("Navigation failed to " + fxmlPath);
             ex.printStackTrace();
         }
     }

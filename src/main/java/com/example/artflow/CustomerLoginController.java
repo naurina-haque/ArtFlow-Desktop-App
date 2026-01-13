@@ -20,8 +20,6 @@ public class CustomerLoginController {
     private static final Logger LOGGER = Logger.getLogger(CustomerLoginController.class.getName());
         @FXML
         private Button back2;
-        @FXML
-        private ImageView imageview2;
 
         @FXML
         private Label signup2;
@@ -40,13 +38,6 @@ public class CustomerLoginController {
         public void initialize()
         {
             dbHelper = DatabaseHelper.getInstance();
-
-            imageview2.sceneProperty().addListener((obs, oldScene, newScene) -> {
-                if (newScene != null) {
-                    imageview2.fitWidthProperty().bind(newScene.widthProperty());
-                    imageview2.fitHeightProperty().bind(newScene.heightProperty());
-                }
-            });
 
             signup2.setOnMouseClicked(e->{
                 try {
@@ -127,6 +118,7 @@ public class CustomerLoginController {
                 // record current user globally for other controllers (e.g., AddArtworkController)
                 CurrentUser.setFullName(fullName);
                 CurrentUser.setUserType("customer");
+                CurrentUser.setEmail(email);
 
                 Stage stage = (Stage) login2.getScene().getWindow();
                 double width = stage.getWidth();

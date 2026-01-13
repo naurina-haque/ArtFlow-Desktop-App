@@ -16,8 +16,6 @@ public class CustomerSignupController {
         @FXML
         private Button back4;
         @FXML
-        private ImageView imageview4;
-        @FXML
         private Label login4;
 
         @FXML
@@ -37,12 +35,6 @@ public class CustomerSignupController {
         {
             dbHelper = DatabaseHelper.getInstance();
 
-            imageview4.sceneProperty().addListener((obs, oldScene, newScene) -> {
-                if (newScene != null) {
-                    imageview4.fitWidthProperty().bind(newScene.widthProperty());
-                    imageview4.fitHeightProperty().bind(newScene.heightProperty());
-                }
-            });
             signup4.setOnAction(e-> handleSignup());
 
             back4.setOnAction(e->{

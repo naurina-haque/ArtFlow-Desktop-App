@@ -16,8 +16,6 @@ public class ArtistSignupController {
     @FXML
     private Button back3;
     @FXML
-    private ImageView imageview3;
-    @FXML
     private Label login3;
     @FXML
     private TextField firstNameField;
@@ -35,12 +33,6 @@ public class ArtistSignupController {
     public void initialize() {
         dbHelper = DatabaseHelper.getInstance();
         
-        imageview3.sceneProperty().addListener((obs, oldScene, newScene) -> {
-            if (newScene != null) {
-                imageview3.fitWidthProperty().bind(newScene.widthProperty());
-                imageview3.fitHeightProperty().bind(newScene.heightProperty());
-            }
-        });
         signup3.setOnAction(e -> handleSignup());
 
         back3.setOnAction(e->{

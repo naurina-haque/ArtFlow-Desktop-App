@@ -22,11 +22,14 @@ public class DatabaseHelper {
             String dbPath = Paths.get("artflow.db").toAbsolutePath().toString();
             dbUrl = "jdbc:sqlite:" + dbPath;
 
-            System.out.println("Initializing database connection...");
+            System.out.println("================================================");
+            System.out.println("DATABASE INITIALIZATION");
+            System.out.println("================================================");
             System.out.println("Database URL: " + dbUrl);
             System.out.println("Working Directory: " + System.getProperty("user.dir"));
-
             System.out.println("Database full path: " + dbPath);
+            System.out.println("Database file exists: " + new java.io.File(dbPath).exists());
+            System.out.println("================================================");
 
             Class.forName("org.sqlite.JDBC");
             connection = DriverManager.getConnection(dbUrl);
@@ -34,6 +37,9 @@ public class DatabaseHelper {
 
             createTablesIfMissing();
             ensureSchemaUpToDate();
+            
+            // Show table contents for debugging
+            debugPrintTableCounts();
             // Development helper: ensure at least one user exists for testing
             //ensureDefaultUserIfEmpty();
 
@@ -66,6 +72,37 @@ public class DatabaseHelper {
             e.printStackTrace();
         }
     }
+    
+    /**
+     * Debug helper: print row counts for all tables
+     */
+    public void debugPrintTableCounts() {
+        System.out.println("------------------------------------------------");
+        System.out.println("DATABASE TABLE CONTENTS:");
+        System.out.println("------------------------------------------------");
+        try (Statement stmt = connection.createStatement()) {
+            // Count users
+            ResultSet rs = stmt.executeQuery("SELECT COUNT(*) as count FROM users");
+            if (rs.next()) {
+                System.out.println("Users table: " + rs.getInt("count") + " records");
+            }
+            
+            // Count artworks
+            rs = stmt.executeQuery("SELECT COUNT(*) as count FROM artworks");
+            if (rs.next()) {
+                System.out.println("Artworks table: " + rs.getInt("count") + " records");
+            }
+            
+            // Count orders
+            rs = stmt.executeQuery("SELECT COUNT(*) as count FROM orders");
+            if (rs.next()) {
+                System.out.println("Orders table: " + rs.getInt("count") + " records");
+            }
+            System.out.println("------------------------------------------------");
+        } catch (SQLException e) {
+            System.err.println("Failed to count table rows: " + e.getMessage());
+        }
+    }
 
     /** Return the filesystem path of the SQLite database file (without jdbc:sqlite: prefix) */
     public String getDbFilePath() {
@@ -83,7 +120,9 @@ public class DatabaseHelper {
                 "user_type TEXT NOT NULL," +
                 "first_name TEXT," +
                 "last_name TEXT," +
-                "full_name TEXT" +
+                "full_name TEXT," +
+                "phone TEXT," +
+                "address TEXT" +
                 ")";
         try (Statement stmt = connection.createStatement()) {
             stmt.execute(sql);
@@ -91,6 +130,30 @@ public class DatabaseHelper {
         } catch (SQLException e) {
             e.printStackTrace();
         }
+        
+        // Ensure phone and address columns exist for older DBs
+        try (Statement stmt = connection.createStatement()) {
+            ResultSet rs = stmt.executeQuery("PRAGMA table_info(users)");
+            boolean hasPhone = false;
+            boolean hasAddress = false;
+            while (rs.next()) {
+                String name = rs.getString("name");
+                if ("phone".equalsIgnoreCase(name)) hasPhone = true;
+                if ("address".equalsIgnoreCase(name)) hasAddress = true;
+            }
+            if (!hasPhone) {
+                try {
+                    stmt.execute("ALTER TABLE users ADD COLUMN phone TEXT");
+                    System.out.println("Added missing column: phone");
+                } catch (SQLException ex) { }
+            }
+            if (!hasAddress) {
+                try {
+                    stmt.execute("ALTER TABLE users ADD COLUMN address TEXT");
+                    System.out.println("Added missing column: address");
+                } catch (SQLException ex) { }
+            }
+        } catch (SQLException ignored) {}
 
 
         // create artworks table for persisting artworks
@@ -304,6 +367,20 @@ public class DatabaseHelper {
         }
     }
 
+    /** Best-effort lookup: find email address for a user by full_name (case-insensitive contains). */
+    public String getEmailForFullName(String fullName) {
+        if (fullName == null || fullName.trim().isEmpty()) return null;
+        String sql = "SELECT email FROM users WHERE full_name LIKE ? COLLATE NOCASE LIMIT 1";
+        try (PreparedStatement ps = connection.prepareStatement(sql)) {
+            ps.setString(1, "%" + fullName.trim() + "%");
+            ResultSet rs = ps.executeQuery();
+            if (rs.next()) return rs.getString("email");
+        } catch (SQLException e) {
+            System.err.println("Error getting email for full name: " + e.getMessage());
+        }
+        return null;
+    }
+
     /**
      * Check credentials and return a short status: "OK", "NO_USER", "WRONG_PASSWORD", "WRONG_TYPE".
      */
@@ -330,6 +407,58 @@ public class DatabaseHelper {
 
     public boolean validateUser(String email, String password, String userType) {
         return loginUser(email, password, userType) != null;
+    }
+
+    /**
+     * Update user profile information (full_name, email, phone, address)
+     */
+    public synchronized boolean updateUserProfile(String currentEmail, String newFullName, String newEmail, String phone, String address) {
+        if (currentEmail == null) return false;
+        
+        String sql = "UPDATE users SET full_name = ?, email = ?, phone = ?, address = ? WHERE email = ? COLLATE NOCASE";
+        try (PreparedStatement ps = connection.prepareStatement(sql)) {
+            ps.setString(1, newFullName);
+            ps.setString(2, newEmail != null ? newEmail.trim().toLowerCase() : currentEmail);
+            ps.setString(3, phone);
+            ps.setString(4, address);
+            ps.setString(5, currentEmail.trim().toLowerCase());
+            
+            int rows = ps.executeUpdate();
+            if (rows > 0) {
+                System.out.println("Profile updated in database for user: " + newFullName);
+                return true;
+            }
+            return false;
+        } catch (SQLException e) {
+            System.err.println("Error updating user profile: " + e.getMessage());
+            e.printStackTrace();
+            return false;
+        }
+    }
+    
+    /**
+     * Get user profile data by email
+     */
+    public synchronized java.util.Map<String, String> getUserProfile(String email) {
+        if (email == null) return null;
+        
+        String sql = "SELECT full_name, email, phone, address FROM users WHERE email = ? COLLATE NOCASE";
+        try (PreparedStatement ps = connection.prepareStatement(sql)) {
+            ps.setString(1, email.trim().toLowerCase());
+            ResultSet rs = ps.executeQuery();
+            
+            if (rs.next()) {
+                java.util.Map<String, String> profile = new java.util.HashMap<>();
+                profile.put("full_name", rs.getString("full_name"));
+                profile.put("email", rs.getString("email"));
+                profile.put("phone", rs.getString("phone"));
+                profile.put("address", rs.getString("address"));
+                return profile;
+            }
+        } catch (SQLException e) {
+            System.err.println("Error getting user profile: " + e.getMessage());
+        }
+        return null;
     }
 
     public void close() {
@@ -460,5 +589,20 @@ public class DatabaseHelper {
             System.err.println("Error reading orders from DB: " + e.getMessage());
         }
         return out;
+    }
+
+    /** Update the status of an order (e.g. 'pending' -> 'completed' or 'rejected'). */
+    public synchronized boolean updateOrderStatus(String orderId, String newStatus) {
+        if (orderId == null || newStatus == null) return false;
+        String sql = "UPDATE orders SET status = ? WHERE id = ?";
+        try (PreparedStatement ps = connection.prepareStatement(sql)) {
+            ps.setString(1, newStatus);
+            ps.setString(2, orderId);
+            int rows = ps.executeUpdate();
+            return rows > 0;
+        } catch (SQLException e) {
+            System.err.println("Error updating order status: " + e.getMessage());
+            return false;
+        }
     }
 }

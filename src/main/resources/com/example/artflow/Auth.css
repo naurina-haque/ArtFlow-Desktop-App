@@ -1,0 +1,136 @@
+/* Violet gradient background for splash, select, and artist pages */
+.violet-gradient {
+  -fx-background-color: linear-gradient(
+    to bottom right,
+    #e8d4f8 0%,
+    #c299e8 50%,
+    #8e3fe2 100%
+  );
+}
+
+/* Greenish gradient background for customer pages */
+.green-gradient {
+  -fx-background-color: linear-gradient(
+    to bottom right,
+    #c7ede6 0%,
+    #98ecdb 50%,
+    #7cdac9 100%
+  );
+}
+
+/* Button styles for violet theme (artist/splash/select) */
+.violet-button {
+  -fx-background-color: #480f6b;
+  -fx-background-radius: 30;
+  -fx-text-fill: white;
+  -fx-font-weight: bold;
+  -fx-font-size: 20px;
+  -fx-cursor: hand;
+  -fx-effect: dropshadow(gaussian, rgba(72, 15, 107, 0.3), 8, 0, 2, 4);
+  -fx-transition: all 0.3s;
+}
+
+.violet-button:hover {
+  -fx-background-color: linear-gradient(
+    from 0% 0% to 100% 100%,
+    #6a1a9a,
+    #5a1585
+  );
+  -fx-text-fill: white;
+  -fx-font-weight: bold;
+  -fx-font-size: 20px;
+  -fx-translate-y: -2px;
+  -fx-effect: dropshadow(gaussian, rgba(72, 15, 107, 0.5), 14, 0, 3, 6);
+}
+
+.violet-button:pressed {
+  -fx-background-color: #3a0c55;
+  -fx-translate-y: 0;
+  -fx-effect: dropshadow(gaussian, rgba(72, 15, 107, 0.3), 8, 0, 2, 4);
+}
+
+/* Button styles for green theme (customer) */
+.green-button {
+  -fx-background-color: #00695c;
+  -fx-background-radius: 30;
+  -fx-text-fill: white;
+  -fx-font-weight: bold;
+  -fx-font-size: 20px;
+  -fx-cursor: hand;
+  -fx-effect: dropshadow(gaussian, rgba(0, 105, 92, 0.3), 8, 0, 2, 4);
+  -fx-transition: all 0.3s;
+}
+
+.green-button:hover {
+  -fx-background-color: linear-gradient(
+    from 0% 0% to 100% 100%,
+    #00897b,
+    #00796b
+  );
+  -fx-text-fill: white;
+  -fx-font-weight: bold;
+  -fx-font-size: 20px;
+  -fx-translate-y: -2px;
+  -fx-effect: dropshadow(gaussian, rgba(0, 105, 92, 0.5), 14, 0, 3, 6);
+}
+
+.green-button:pressed {
+  -fx-background-color: #004d40;
+  -fx-translate-y: 0;
+  -fx-effect: dropshadow(gaussian, rgba(0, 105, 92, 0.3), 8, 0, 2, 4);
+}
+
+/* Additional styling for login/signup forms */
+.form-container {
+  -fx-background-color: rgba(255, 255, 255, 0.95);
+  -fx-background-radius: 30;
+  -fx-border-radius: 30;
+  -fx-border-color: rgba(255, 255, 255, 0.8);
+  -fx-border-width: 2;
+  -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.15), 20, 0, 0, 10);
+}
+
+/* Text field styling */
+.text-field {
+  -fx-background-radius: 30;
+  -fx-border-radius: 30;
+  -fx-padding: 8 15;
+}
+
+.text-field:focused {
+  -fx-border-color: #480f6b;
+  -fx-border-width: 2;
+  -fx-effect: dropshadow(gaussian, rgba(72, 15, 107, 0.3), 8, 0, 0, 3);
+}
+
+.password-field {
+  -fx-background-radius: 30;
+  -fx-border-radius: 30;
+  -fx-padding: 8 15;
+}
+
+.password-field:focused {
+  -fx-border-color: #480f6b;
+  -fx-border-width: 2;
+  -fx-effect: dropshadow(gaussian, rgba(72, 15, 107, 0.3), 8, 0, 0, 3);
+}
+
+/* Progress bar styling for splash screen */
+.progress-bar {
+  -fx-accent: #480f6b;
+}
+
+.progress-bar > .bar {
+  -fx-background-color: linear-gradient(
+    from 0% 0% to 100% 100%,
+    #6a1a9a,
+    #480f6b
+  );
+  -fx-background-radius: 10;
+  -fx-padding: 4;
+}
+
+.progress-bar > .track {
+  -fx-background-color: rgba(72, 15, 107, 0.2);
+  -fx-background-radius: 10;
+}

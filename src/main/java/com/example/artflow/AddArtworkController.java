@@ -69,6 +69,12 @@ public class AddArtworkController {
     @FXML
     public Label imageSectionLabel;
 
+    @FXML
+    public Label create;
+
+    @FXML
+    public Label sublabel;
+
     // flag to ignore the click immediately after a drag-drop to prevent opening file chooser twice
     private volatile boolean droppedJustNow = false;
 
@@ -109,6 +115,8 @@ public class AddArtworkController {
         if (headerLabel != null) headerLabel.setText("Edit Art");
         if (saveBtn != null) saveBtn.setText("Save");
         if (imageSectionLabel != null) imageSectionLabel.setText("Edit Image");
+        if (create != null) create.setText("Edit ArtWork");
+        if (sublabel != null) sublabel.setText("");
     }
 
     @FXML
@@ -123,6 +131,8 @@ public class AddArtworkController {
         if (headerLabel != null) headerLabel.setText("Create New Artwork");
         if (saveBtn != null) saveBtn.setText("🚀 Publish Artwork");
         if (imageSectionLabel != null) imageSectionLabel.setText("📷 Artwork Image");
+        if (create != null) create.setText("Create New ArtWork");
+
 
         // populate categories
         categoryCombo.getItems().addAll(

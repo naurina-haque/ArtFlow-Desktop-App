@@ -23,7 +23,7 @@ public class Splashscreen extends Application {
         }
 
         FXMLLoader fxmlLoader1 = new FXMLLoader(Splashscreen.class.getResource("splash.fxml"));
-        Scene scene1 = new Scene(fxmlLoader1.load(), 1200, 700);
+        Scene scene1 = new Scene(fxmlLoader1.load(), 1250, 650);
 
         stage.setTitle("ArtFlow");
         stage.setScene(scene1);

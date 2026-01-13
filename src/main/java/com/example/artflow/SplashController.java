@@ -14,23 +14,13 @@ import javafx.util.Duration;
 public class SplashController {
     @FXML
     private ProgressBar progressbar;
-    @FXML
-    private ImageView imageview5;
 
 
     public void initialize() {
         progressbar.setStyle("-fx-accent:#4a1d7c");
         KeyValue kv = new KeyValue(progressbar.progressProperty(), 1);
-        KeyFrame kf = new KeyFrame(Duration.seconds(3), kv);
+        KeyFrame kf = new KeyFrame(Duration.seconds(2), kv);
         Timeline timeline = new Timeline(kf);
-
-
-        imageview5.sceneProperty().addListener((obs, oldScene, newScene) -> {
-            if (newScene != null) {
-                imageview5.fitWidthProperty().bind(newScene.widthProperty());
-                imageview5.fitHeightProperty().bind(newScene.heightProperty());
-            }
-        });
 
         timeline.setOnFinished(e -> {
             try {
