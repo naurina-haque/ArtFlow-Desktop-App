@@ -38,10 +38,8 @@ public class DatabaseHelper {
             createTablesIfMissing();
             ensureSchemaUpToDate();
             
-            // Show table contents for debugging
+
             debugPrintTableCounts();
-            // Development helper: ensure at least one user exists for testing
-            //ensureDefaultUserIfEmpty();
 
         } catch (Exception e) {
             System.err.println("Error initializing database:");
@@ -186,7 +184,7 @@ public class DatabaseHelper {
                     System.out.println("Added missing column: artist_name");
                 } catch (SQLException ex) { }
             }
-            // ensure description column exists
+
             boolean hasDesc = false;
             rs = stmt.executeQuery("PRAGMA table_info(artworks)");
             while (rs.next()) {
@@ -287,9 +285,9 @@ public class DatabaseHelper {
         try (PreparedStatement pstmt = connection.prepareStatement(sql)) {
             int idx = 1;
             if (hasUsernameColumn) {
-                pstmt.setString(idx++, normalizedEmail); // username = email for compatibility
+                pstmt.setString(idx++, normalizedEmail);
             }
-            pstmt.setString(idx++, password); // In production, hash the password
+            pstmt.setString(idx++, password);
             pstmt.setString(idx++, normalizedEmail);
             pstmt.setString(idx++, userType);
             pstmt.setString(idx++, firstName.trim());
@@ -322,7 +320,7 @@ public class DatabaseHelper {
         String sql = "SELECT first_name, last_name, full_name FROM users WHERE email = ? COLLATE NOCASE AND password = ? AND user_type = ?";
         try (PreparedStatement pstmt = connection.prepareStatement(sql)) {
             pstmt.setString(1, normalizedEmail);
-            pstmt.setString(2, password); // In production, verify hashed password
+            pstmt.setString(2, password);
             pstmt.setString(3, userType);
             ResultSet rs = pstmt.executeQuery();
             if (rs.next()) {
@@ -367,7 +365,7 @@ public class DatabaseHelper {
         }
     }
 
-    /** Best-effort lookup: find email address for a user by full_name (case-insensitive contains). */
+
     public String getEmailForFullName(String fullName) {
         if (fullName == null || fullName.trim().isEmpty()) return null;
         String sql = "SELECT email FROM users WHERE full_name LIKE ? COLLATE NOCASE LIMIT 1";
@@ -381,9 +379,7 @@ public class DatabaseHelper {
         return null;
     }
 
-    /**
-     * Check credentials and return a short status: "OK", "NO_USER", "WRONG_PASSWORD", "WRONG_TYPE".
-     */
+
     public String checkCredentials(String email, String password, String expectedUserType) {
         if (email == null) return "NO_USER";
         String normalized = email.trim().toLowerCase();
@@ -409,9 +405,7 @@ public class DatabaseHelper {
         return loginUser(email, password, userType) != null;
     }
 
-    /**
-     * Update user profile information (full_name, email, phone, address)
-     */
+
     public synchronized boolean updateUserProfile(String currentEmail, String newFullName, String newEmail, String phone, String address) {
         if (currentEmail == null) return false;
         
@@ -436,9 +430,7 @@ public class DatabaseHelper {
         }
     }
     
-    /**
-     * Get user profile data by email
-     */
+
     public synchronized java.util.Map<String, String> getUserProfile(String email) {
         if (email == null) return null;
         
@@ -591,7 +583,6 @@ public class DatabaseHelper {
         return out;
     }
 
-    /** Update the status of an order (e.g. 'pending' -> 'completed' or 'rejected'). */
     public synchronized boolean updateOrderStatus(String orderId, String newStatus) {
         if (orderId == null || newStatus == null) return false;
         String sql = "UPDATE orders SET status = ? WHERE id = ?";

@@ -69,7 +69,6 @@ public class ArtistSidebarController {
     }
 
     private void openEarnings(MouseEvent e) {
-        // if you have an earnings view, replace with the path; for now no-op but select menu
         selectLocal("earnings");
     }
 
@@ -94,7 +93,6 @@ public class ArtistSidebarController {
         }
     }
 
-    // central navigate helper: load FXML into the current stage and call selectMenu(menuKey) on its controller if available
     private void navigateTo(MouseEvent e, String resourcePath, String menuKey) {
         try {
             Stage stage = findStage(e);
@@ -107,12 +105,10 @@ public class ArtistSidebarController {
             FXMLLoader loader = new FXMLLoader(res);
             Scene s = new Scene(loader.load(), stage.getWidth(), stage.getHeight());
             Object ctrl = loader.getController();
-            // if destination has selectMenu(String), call it
             try {
                 java.lang.reflect.Method m = ctrl == null ? null : ctrl.getClass().getMethod("selectMenu", String.class);
                 if (m != null) m.invoke(ctrl, menuKey);
             } catch (NoSuchMethodException ignored) {
-                // ignore if method doesn't exist
             }
             stage.setScene(s);
         } catch (Exception ex) {
@@ -120,7 +116,6 @@ public class ArtistSidebarController {
         }
     }
 
-    // select style locally on this sidebar instance (useful when scene not changing)
     private void selectLocal(String menuKey) {
         try {
             dashboardHBox.getStyleClass().remove("selected");
@@ -157,7 +152,6 @@ public class ArtistSidebarController {
         return null;
     }
 
-    // Recursively attach handler to parent and child nodes
     private void wireClickable(javafx.scene.Parent parent, javafx.event.EventHandler<MouseEvent> handler) {
         if (parent == null || handler == null) return;
         try { parent.setOnMouseClicked(handler); } catch (Exception ignored) {}
